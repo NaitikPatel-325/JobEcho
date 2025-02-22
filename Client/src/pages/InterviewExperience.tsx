@@ -278,7 +278,7 @@ const InterviewExperience = () => {
   }, []);
 
   const handleCardClick = (id: string) => {
-    navigate(`/viewexperience/${id}`);
+    navigate(`/CollegeCompanies/${id}`);
   };
 
   if (loading) return (
