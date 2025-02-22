@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { Search, GraduationCap, Star } from "lucide-react";
+import { motion } from "framer-motion";
 import {
     ResizableHandle,
     ResizablePanel,
