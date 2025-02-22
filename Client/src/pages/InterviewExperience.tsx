@@ -249,7 +249,7 @@ export interface IExperienceSubmission {
   offers: IOffer[];
 }
 
-const InterviewExperience = () => {
+const InterviewExperience = ({company_id}:{company_id: any}) => {
   const [experiences, setExperiences] = useState<IExperienceSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -258,8 +258,9 @@ const InterviewExperience = () => {
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
+        console.log("Inide interview : ",company_id);
         const response = await axios.get(
-          "http://localhost:3000/user/InterviewExperience"
+          `http://localhost:3000/experience/get-experience-by-company/${company_id}`
         );
         if (Array.isArray(response.data)) {
           setExperiences(response.data);

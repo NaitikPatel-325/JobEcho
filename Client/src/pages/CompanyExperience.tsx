@@ -9,72 +9,74 @@ export interface CollegeCompany {
   company: string;
 }
 
-const colleges: CollegeCompany[] = [
-  {
-    id: "1",
-    name: "Dharmsinh Desai University",
-    company: "MasterCard"
-  },
-  {
-    id: "2",
-    name: "Dharmsinh Desai University",
-    company: "Infosys"
-  },
-  {
-    id: "3",
-    name: "DAIICT",
-    company: "Google"
-  },
-  {
-    id: "4",
-    name: "LD University",
-    company: "Microsoft"
-  },
-  {
-    id: "5",
-    name: "IIT Bombay",
-    company: "Apple"
-  }
-];
-
 interface CompanyExperienceProps {
-  selectedCollege: { name: string };
+  selectedCollege: { id: string };
 }
 
 const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
   const [filteredColleges, setFilteredColleges] = useState<CollegeCompany[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  console.log(selectedCollege);
+
   useEffect(() => {
-    if (selectedCollege?.name) {
-      const filtered = colleges.filter((college) => college.name === selectedCollege.name);
-      setFilteredColleges(filtered);
-    } else {
-      setFilteredColleges(colleges);
-    }
+    const fetchCompanies = async () => {
+      if (!selectedCollege) return;
+
+      setLoading(true);
+      setError(null);
+
+      console.log(selectedCollege);
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/user/getCollegesandcompany/${selectedCollege}`
+        );
+
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch companies");
+        }
+
+        const data: CollegeCompany[] = await response.json();
+        console.log(data);
+        setFilteredColleges(data);
+      } catch (err) {
+        setError("Error fetching data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
   }, [selectedCollege]);
 
-  const handleCardClick = (id: string) => {
-    //console.log(id);
-    navigate(`/CollegeCompanies?id=${id}`);
-
+  const handleCardClick = (company) => {
+    console.log(company._id);
+    navigate(`/CollegeCompanies?id=${company._id}`);
   };
 
   return (
     <div className="w-full h-full overflow-y-auto custom-scrollbar">
       <div className="space-y-6">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-2xl font-bold text-white mb-6"
         >
           Interview Experiences
         </motion.h2>
+
+        {loading && <p className="text-center text-gray-400">Loading...</p>}
+        {error && <p className="text-center text-red-400">{error}</p>}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredColleges.length > 0 ? (
+          {!loading && !error && filteredColleges.length > 0 ? (
             filteredColleges.map((college, index) => (
-              <motion.div 
-                key={college.id} 
+              <motion.div
+                key={college.id}
                 className="group relative"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -82,7 +84,7 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
               >
                 <Card
                   className="h-full transform transition-all duration-300 hover:scale-105 cursor-pointer bg-white/5 border-white/10"
-                  onClick={() => handleCardClick(college.id)}
+                  onClick={() => handleCardClick(college)}
                 >
                   <CardContent className="p-6">
                     <div className="space-y-4">
@@ -90,9 +92,7 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
                         <h3 className="text-xl font-semibold text-white">
                           {college.name}
                         </h3>
-                        <p className="text-gray-400">
-                          {college.company}
-                        </p>
+                        <p className="text-gray-400">{college.company}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -108,13 +108,16 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
               </motion.div>
             ))
           ) : (
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center col-span-2 text-gray-400"
-            >
-              No interview experiences found for {selectedCollege?.name || 'this company'}.
-            </motion.p>
+            !loading &&
+            !error && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center col-span-2 text-gray-400"
+              >
+                No interview experiences found for {selectedCollege?.name || "this company"}.
+              </motion.p>
+            )
           )}
         </div>
       </div>

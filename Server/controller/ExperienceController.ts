@@ -2,7 +2,8 @@
 import { Request, Response } from "express";
 import Experience from "../models/Experience";
 import { createCompany } from "./CompanyController";
-import { Company } from "../models/Company";
+import Company from "../models/Company";
+import mongoose from "mongoose";
 
 export const submitExperience = async (req: Request, res: Response) => {
   try {
@@ -68,7 +69,6 @@ export const getExperiences = async (req: Request, res: Response) => {
   console.log("Called!!");
   try {
     const experiences = await Experience.find();
-    console.log("Fetched experiences:", experiences); 
     console.log("Fetched experiences:", experiences);
     res.status(200).json(experiences);
   } catch (error) {
@@ -78,29 +78,30 @@ export const getExperiences = async (req: Request, res: Response) => {
 
 };
 
-
-export const getExperienceByCollege = async (req: Request, res: Response) => {  
+export const getExperienceByCompany = async (req: Request, res: Response): Promise<void> => {  
   console.log("Called!!");
+
   try {
+    const companyId = req.params.id; // Extract company ID from request parameters
 
-    const { company_id } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      res.status(400).json({ message: "Invalid company ID" });
+      return;
+    }
 
-const users = await Experience.find({ "experiences.company": company_id });
+    const experiences = await Experience.find({
+      experiences: { 
+        $elemMatch: { company: new mongoose.Types.ObjectId(companyId) } 
+      }
+    })
+    .populate("experiences.company", "name website") // Populate company details
+    .populate("offers.company", "name") // Populate offer details
+    .exec();
 
-const matchedExperiences = users.map(user => ({
-    _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    experiences: user.experiences.filter(exp => exp.company.toString() === company_id)
-}));
-
-res.json(matchedExperiences);
-
+    console.log("Experiences for Company:", experiences);
+    res.status(200).json(experiences);
   } catch (error) {
     console.error("Error fetching experiences:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Server error", error });
   }
-
 };
-
-

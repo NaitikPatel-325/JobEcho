@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import College from "../models/Collage"; 
 import Company from "../models/Company";
 import { promises } from "dns";
+import mongoose from "mongoose";
 
 
 export const getColleges = async (req: Request, res: Response) => {
@@ -25,13 +26,19 @@ export const getCollegeById = async (req: Request, res: Response) => {
 
 export const getCompaniesByCollege = async (req: Request, res: Response): Promise<void> => {
   try {
-    const collegeId = req.query.id as string;
+    const collegeId = req.params.id;
+
+    // console.log(collegeId);
+
     if (!collegeId) {
       res.status(400).json({ error: "College ID is required" });
       return;
     }
 
-    const companies = await Company.find({ collegeIds: { $in: [collegeId] } });
+    const companies = await Company.find({ college: { $in: [collegeId] } });
+
+    //console.log(companies);
+
 
     res.status(200).json(companies);
   } catch (error) {

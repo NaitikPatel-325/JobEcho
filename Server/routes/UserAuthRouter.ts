@@ -17,7 +17,7 @@ UserAuthRouter.get("/getCollegesandcompany/:id", getCompaniesByCollege);
 
 
 // UserAuthRouter.get("/InterviewExperience", getExperiences);
-UserAuthRouter.get("/InterviewExperience", getExperiences);
+UserAuthRouter.get("/InterviewExperience/:id", getExperiences);
 // UserAuthRouter.get("/InterviewExperience/:id", getExperienceById); // Fetch experience by ID
 // UserAuthRouter.get("/InterviewExperienceByCompany", getExperiencesByCompany); // Fetch by company name
 

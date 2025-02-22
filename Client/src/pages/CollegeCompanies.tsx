@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Search, GraduationCap, Star, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -29,6 +29,8 @@ export default function CollegeCompanies() {
   const [error, setError] = useState("");
 
   const companyId = searchParams.get("id");
+
+  console.log("Inside college : ",companyId);
 
   useEffect(() => {
     const fetchColleges = async () => {
@@ -165,11 +167,11 @@ export default function CollegeCompanies() {
 
           <ResizablePanel defaultSize={65} className="p-5">
             <AnimatePresence mode="wait">
-              <motion.div key={companyId || selectedCollege?.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }} className="h-full">
-                {companyId ? (
-                  <InterviewExperience companyId={companyId} />
+              <motion.div key={searchParams.get("id")} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }} className="h-full">
+                {searchParams.get("id") ? (
+                  <InterviewExperience company_id={searchParams.get("id")} />
                 ) : (
-                  selectedCollege && <CompanyExperience selectedCollege={selectedCollege} onCompanySelect={(id) => setSearchParams({ company_id: id })} />
+                  selectedCollege && <CompanyExperience selectedCollege={selectedCollege?.id} />
                 )}
               </motion.div>
             </AnimatePresence>

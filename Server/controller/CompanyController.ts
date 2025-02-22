@@ -1,6 +1,6 @@
 
 import { Request, Response } from "express";
-import { Company } from "../models/Company";
+import Company from "../models/Company";
 
 export const createCompany = async (req:Request) => {
   try {
