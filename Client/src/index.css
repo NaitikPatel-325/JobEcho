@@ -31,11 +31,11 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.8); /* Slight transparency */
   color: white;
 }
 
