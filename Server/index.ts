@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import { UserAuthRouter } from "./routes/UserAuthRouter";
 import cookieParser from "cookie-parser";
 import { dbConnect } from "./dbConnect";
+import CompanyRouter from "./routes/CompanyRoutes";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 config();
 
 app.use("/user", UserAuthRouter)
+app.use("/company",CompanyRouter)
 
 dbConnect();
 
