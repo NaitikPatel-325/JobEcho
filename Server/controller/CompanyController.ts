@@ -2,7 +2,6 @@
 import { Request, Response } from "express";
 import { Company } from "../models/Experience";
 
-
 export const createCompany = async (req: Request) => {
   try {
     const {name} = req.body;

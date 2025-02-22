@@ -1,7 +1,7 @@
 
 import { Request, Response } from "express";
-import Experience from "../models/Experience";
 import { Company } from "../models/Experience";
+import Experience from "../models/Experience";
 import { createCompany } from "./CompanyController";
 
 export const submitExperience = async (req: Request, res: Response) => {
