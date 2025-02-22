@@ -55,7 +55,9 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
   }, [selectedCollege]);
 
   const handleCardClick = (id: string) => {
-    navigate(`/CollegeCompanies/${id}`);
+    //console.log(id);
+    navigate(`/CollegeCompanies?id=${id}`);
+
   };
 
   return (

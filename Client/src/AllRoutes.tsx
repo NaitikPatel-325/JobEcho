@@ -14,9 +14,10 @@ const ExperienceForm = lazy(() => import("./components/ExperienceForm"));
 
 const NewExperienceForm = lazy(() => import("./components/NewExperienceForm"));
 
-const NewInterviewExperience = lazy(() => import("./pages/NewInterviewExperience"));
 
 const CollegeCompanies = lazy(() => import("./pages/CollegeCompanies"));
+
+
 
 export default function AllRoutes() {
   return (
@@ -35,7 +36,6 @@ export default function AllRoutes() {
         <Route path="/user-experience-form" element={<ExperienceForm />} />
         <Route path="/InterviewExperience" element={<InterviewExperiences />} />
         <Route path="/user-experience-form-1" element={<NewExperienceForm />} />
-        <Route path="/InterviewExperience-1" element={<NewInterviewExperience />} />
         <Route path="/CollegeCompanies" element={<CollegeCompanies />} />
 
 

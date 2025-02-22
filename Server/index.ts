@@ -5,6 +5,7 @@ import { UserAuthRouter } from "./routes/UserAuthRouter";
 import cookieParser from "cookie-parser";
 import { dbConnect } from "./dbConnect";
 import CompanyRouter from "./routes/CompanyRoutes";
+import ExperienceRouter from "./routes/ExperienceRouter";
 
 const app = express();
 
@@ -15,6 +16,7 @@ config();
 
 app.use("/user", UserAuthRouter)
 app.use("/company",CompanyRouter)
+app.use("/experience",ExperienceRouter);
 
 dbConnect();
 

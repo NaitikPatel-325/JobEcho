@@ -17,12 +17,7 @@ interface IOffer {
   package?: string;
 }
 
-interface ICompanyDetails {
-  name: string;
-  locations:string[];
-  website:string;
-  info:string;
-}
+
 
 export interface IExperienceSubmission extends Document {
   firstName: string;
@@ -51,12 +46,7 @@ const OfferSchema = new Schema<IOffer>({
   package: { type: String, required: function () { return this.status === "Selected"; } },
 });
 
-const CompanySchema = new Schema<ICompanyDetails>({
-  name: { type: String, required: true },
-  locations: { type: [String], default: undefined },
-  website: { type: String, default: undefined },
-  info: { type: String, default: undefined }
-});
+
 
 
 const ExperienceSubmissionSchema = new Schema<IExperienceSubmission>({
@@ -69,6 +59,5 @@ const ExperienceSubmissionSchema = new Schema<IExperienceSubmission>({
 });
 
 const Experience = mongoose.model<IExperienceSubmission>("Experience", ExperienceSubmissionSchema);
-export const Company = mongoose.model<ICompanyDetails>("Company", CompanySchema);
 
 export default Experience;
