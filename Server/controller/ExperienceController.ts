@@ -68,7 +68,7 @@ export const getExperiences = async (req: Request, res: Response) => {
   console.log("Called!!");
   try {
     const experiences = await Experience.find();
-    console.log("Fetched experiences:", experiences); // Log the data
+    console.log("Fetched experiences:", experiences); 
     res.status(200).json(experiences);
   } catch (error) {
     console.error("Error fetching experiences:", error);

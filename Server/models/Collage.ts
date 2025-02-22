@@ -7,6 +7,7 @@ interface ICollege extends Document {
   briefDescription?: string;
   websiteUrl?: string;
   contactInformation: string;
+  companies: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,6 +37,12 @@ const collegeSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    companies: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+    ],
   },
   { timestamps: true }
 );
