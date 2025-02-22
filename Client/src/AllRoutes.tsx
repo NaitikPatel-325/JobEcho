@@ -6,7 +6,6 @@ const Home = lazy(() => import("./pages/Home"));
 const Landing = lazy(() => import("./pages/Landing"));
 const Collages = lazy(() => import("./pages/Collages"));
 const Signup = lazy(() => import("./Signup"));
-const Features = lazy(() => import("./pages/Features"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const UserDetails = lazy(() => import("./components/UserDetails"));
@@ -33,7 +32,6 @@ export default function AllRoutes() {
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/features" element={<Features />} />
         <Route path="/userdetails" element={<UserDetails />} />
         <Route path="/user-experience-form" element={<ExperienceForm />} />
         <Route path="/InterviewExperience" element={<InterviewExperiences />} />
