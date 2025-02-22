@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import College from "../models/Collage"; 
+import Experience from "../models/Experience";
 
 
 export const getColleges = async (req: Request, res: Response) => {
@@ -21,4 +22,11 @@ export const getCollegeById = async (req: Request, res: Response) => {
     }
 };
 
-  
+export const getCollegesandcompany = async (req: Request, res: Response) => {
+    try {
+      const colleges = await College.find().populate('company');
+      res.status(200).json(colleges);
+    } catch (error) {
+      res.status(500).json({ error: (error as any).message });
+    }
+}
