@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import {  useLocation } from "react-router-dom";
+import AllRoutes from "./AllRoutes";
+import Header from "./components/Header";
+import { useDispatch } from "react-redux";
+import { useGetUserDetailsQuery } from "./redux/slices/api";
+import { useEffect } from "react";
+import { updateCurrentUser, updateIsLoggedIn } from "./redux/slices/appSlice";
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const { data, isSuccess } = useGetUserDetailsQuery();
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      dispatch(updateCurrentUser(data));
+      dispatch(updateIsLoggedIn(true));
+    }
+  }, [data, isSuccess, dispatch]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
+      {location.pathname !== "/" && location.pathname !== "/user-experience-form-1" && <Header />}
+      <AllRoutes />
+    </GoogleOAuthProvider>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <AppContent />
+  );
+}
+
+export default App;
