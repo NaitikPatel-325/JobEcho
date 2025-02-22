@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema, Model, model } from "mongoose";
 
 interface ICollege extends Document {
-  collegeId: string;
   collegeName: string;
   location: string;
   briefDescription?: string;
@@ -13,11 +12,6 @@ interface ICollege extends Document {
 
 const collegeSchema: Schema = new Schema(
   {
-    collegeId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     collegeName: {
       type: String,
       required: true,

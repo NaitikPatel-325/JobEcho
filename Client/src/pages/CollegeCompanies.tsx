@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Search, GraduationCap, Star, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -9,6 +9,8 @@ import {
 import { useSearchParams } from "react-router-dom";
 import CompanyExperience from "./CompanyExperience";
 import InterviewExperience from "./InterviewExperience";
+import Sunburst from 'sunburst-chart';
+import SunburstChart from "./sunburst";
 
 export interface College {
   id: string;
@@ -25,6 +27,35 @@ const colleges: College[] = [
   { id: "5", name: "IIT Bombay", location: "Mumbai, Maharashtra", rating: 4.9 }
 ];
 
+const sampleData = {
+  name: "root",
+  children: [
+    {
+      name: "Engineering",
+      children: [
+        { name: "Computer Science", value: 30 },
+        { name: "Mechanical", value: 20 },
+        { name: "Civil", value: 15 },
+      ],
+    },
+    {
+      name: "Management",
+      children: [
+        { name: "MBA", children: [{ name: "MBATech", value:12},{ name: "MTech", value:21} ] },
+        { name: "BBA", value: 10 },
+      ],
+    },
+    {
+      name: "Science",
+      children: [
+        { name: "Physics", value: 18 },
+        { name: "Mathematics", value: 22 },
+      ],
+    },
+  ],
+};
+
+
 export default function CollegeCompanies() {
   const [selectedCollege, setSelectedCollege] = useState(colleges[0]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,6 +63,20 @@ export default function CollegeCompanies() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const companyId = searchParams.get("id");
+
+  const sunburstRef = useRef(null);
+
+  useEffect(() => {
+    if (sunburstRef.current) {
+      Sunburst()
+        .data(sampleData)
+        .width(400)
+        .height(400)
+        .color((d) => (d.children ? "#3498db" : "#e74c3c"))
+        .size("value")
+        .label("name")(sunburstRef.current);
+    }
+  });
 
   const filteredColleges = colleges.filter((college) =>
     college.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -53,6 +98,8 @@ export default function CollegeCompanies() {
   };
 
   return (
+    <>
+    
     <div className="min-h-screen p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-[1800px] mx-auto">
         <motion.div 
@@ -201,7 +248,9 @@ export default function CollegeCompanies() {
             </AnimatePresence>
           </ResizablePanel>
         </ResizablePanelGroup>
+        <SunburstChart/>
       </div>
     </div>
+    </>
   );
 }

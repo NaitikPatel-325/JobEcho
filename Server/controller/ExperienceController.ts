@@ -1,8 +1,8 @@
 
 import { Request, Response } from "express";
-import { Company } from "../models/Experience";
 import Experience from "../models/Experience";
 import { createCompany } from "./CompanyController";
+import { Company } from "../models/Company";
 
 export const submitExperience = async (req: Request, res: Response) => {
   try {
@@ -68,7 +68,7 @@ export const getExperiences = async (req: Request, res: Response) => {
   console.log("Called!!");
   try {
     const experiences = await Experience.find();
-    console.log("Fetched experiences:", experiences); // Log the data
+    console.log("Fetched experiences:", experiences);
     res.status(200).json(experiences);
   } catch (error) {
     console.error("Error fetching experiences:", error);
@@ -76,3 +76,30 @@ export const getExperiences = async (req: Request, res: Response) => {
   }
 
 };
+
+
+export const getExperienceByCollege = async (req: Request, res: Response) => {  
+  console.log("Called!!");
+  try {
+
+    const { company_id } = req.body;
+
+const users = await Experience.find({ "experiences.company": company_id });
+
+const matchedExperiences = users.map(user => ({
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    experiences: user.experiences.filter(exp => exp.company.toString() === company_id)
+}));
+
+res.json(matchedExperiences);
+
+  } catch (error) {
+    console.error("Error fetching experiences:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+
+};
+
+
