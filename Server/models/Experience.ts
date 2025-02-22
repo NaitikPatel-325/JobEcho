@@ -19,6 +19,9 @@ interface IOffer {
 
 interface ICompanyDetails {
   name: string;
+  locations:string[];
+  website:string;
+  info:string;
 }
 
 export interface IExperienceSubmission extends Document {
@@ -50,7 +53,11 @@ const OfferSchema = new Schema<IOffer>({
 
 const CompanySchema = new Schema<ICompanyDetails>({
   name: { type: String, required: true },
+  locations: { type: [String], default: undefined },
+  website: { type: String, default: undefined },
+  info: { type: String, default: undefined }
 });
+
 
 const ExperienceSubmissionSchema = new Schema<IExperienceSubmission>({
   firstName: { type: String, required: true },
