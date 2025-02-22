@@ -4,7 +4,6 @@ import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { Icons } from "./icons";
 import { Circle } from "./circle";
 
-
 export function CircularNetwork({ className }: { className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showBeams, setShowBeams] = useState(false);
@@ -20,8 +19,8 @@ export function CircularNetwork({ className }: { className?: string }) {
   };
 
   useEffect(() => {
-    const nodesTimer = setTimeout(() => setShowNodes(true), 500);
-    const beamsTimer = setTimeout(() => setShowBeams(true), 1500);
+    const nodesTimer = setTimeout(() => setShowNodes(true), 10);
+    const beamsTimer = setTimeout(() => setShowBeams(true), 10);
 
     return () => {
       clearTimeout(nodesTimer);
@@ -37,38 +36,42 @@ export function CircularNetwork({ className }: { className?: string }) {
       )}
       ref={containerRef}
     >
-      <div className="flex flex-col items-center gap-16">
-        {[
-          { key: 'openai', icon: <Icons.openai />, delay: 100, ref: nodeRefs.openai },
-          { key: 'drive', icon: <Icons.googleDrive />, delay: 200, ref: nodeRefs.drive },
-          { key: 'docs', icon: <Icons.googleDocs />, delay: 300, ref: nodeRefs.docs },
-          { key: 'whatsapp', icon: <Icons.whatsapp />, delay: 400, ref: nodeRefs.whatsapp },
-          { key: 'messenger', icon: <Icons.messenger />, delay: 500, ref: nodeRefs.messenger },
-          { key: 'notion', icon: <Icons.notion />, delay: 600, ref: nodeRefs.notion },
-        ].map((node, index) => (
-          <React.Fragment key={node.key}>
-            <Circle
-              ref={node.ref}
-              className={cn(
-                index === 0 ? "size-16" : "size-12",
-                "opacity-0",
-                showNodes && "animate-fade-in",
-                showNodes && `animation-delay-${node.delay}`
+      <div className="transform rotate-90 origin-center w-full h-full">
+        <div className="flex flex-col items-center gap-16">
+          {[
+            { key: 'openai', icon: <Icons.openai />, delay: 100, ref: nodeRefs.openai },
+            { key: 'drive', icon: <Icons.googleDrive />, delay: 200, ref: nodeRefs.drive },
+            { key: 'docs', icon: <Icons.googleDocs />, delay: 300, ref: nodeRefs.docs },
+            { key: 'whatsapp', icon: <Icons.whatsapp />, delay: 400, ref: nodeRefs.whatsapp },
+            { key: 'messenger', icon: <Icons.messenger />, delay: 500, ref: nodeRefs.messenger },
+            { key: 'notion', icon: <Icons.notion />, delay: 600, ref: nodeRefs.notion },
+          ].map((node, index) => (
+            <React.Fragment key={node.key}>
+              <Circle
+                ref={node.ref}
+                className={cn(
+                  index === 0 ? "size-16" : "size-12",
+                  "opacity-0",
+                  showNodes && "animate-fade-in",
+                  showNodes && `animation-delay-${node.delay}`
+                )}
+              >
+                {node.icon}
+              </Circle>
+              {showBeams && index > 0 && (
+                <AnimatedBeam
+                  containerRef={containerRef}
+                  fromRef={nodeRefs.openai}
+                  toRef={node.ref}
+                  duration={1.5}
+                  delay={(index - 1) * 0.2}
+                  startXOffset={0} // Adjust as needed
+                  endXOffset={0} // Adjust as needed
+                />
               )}
-            >
-              {node.icon}
-            </Circle>
-            {showBeams && index > 0 && (
-              <AnimatedBeam
-                containerRef={containerRef}
-                fromRef={nodeRefs.openai}
-                toRef={node.ref}
-                duration={1.5}
-                delay={(index - 1) * 0.2}
-              />
-            )}
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
