@@ -35,6 +35,7 @@ export default function CollegeCompanies() {
     const fetchColleges = async () => {
       try {
         const response = await fetch("http://localhost:3000/user/getallCollages"); 
+        console.log(response);
         if (!response.ok) throw new Error("Failed to fetch colleges");
         const data = await response.json();
         const formattedColleges = data.map((college: any) => ({
