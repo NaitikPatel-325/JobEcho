@@ -1,152 +1,393 @@
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-  } from "@/components/ui/resizable";
-  import { useState } from "react";
-  import { Search, User2, Star } from "lucide-react";
-  import { motion } from "framer-motion";
-  import InterviewExperience from "./InterviewExperience";
-  import { useNavigate } from "react-router-dom";
-  
-  export interface Person {
+// import  { useEffect, useState } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import { Card, CardContent } from "@/components/ui/card";
+
+// interface IRound {
+//   name: string;
+//   experience: string;
+// }
+
+// interface IExperience {
+//   company: string;
+//   year: string;
+//   rounds: IRound[];
+// }
+
+// interface IOffer {
+//   company: string;
+//   status: "Selected" | "Rejected";
+//   package?: string;
+// }
+
+// // interface IComment{
+// //   user: string;
+// //   content: string;
+// //   createdAt: Date;
+// // }
+
+// export interface IExperienceSubmission {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   collegeName: string;
+//   graduationYear: string;
+//   experiences: IExperience[];
+//   offers: IOffer[];
+// }
+
+// const InterviewExperience = () => {
+//   const [experiences, setExperiences] = useState<IExperienceSubmission[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   // const [showModal, setShowModal] = useState(false);
+//   // const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
+//   // const [comments, setComments] = useState<IComment[]>([]);
+//   const [error, setError] = useState<string | null>(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchExperiences = async () => {
+//       try {
+//         const response = await axios.get(
+//           "http://localhost:3000/user/InterviewExperience"
+//         );
+//         if (Array.isArray(response.data)) {
+//           setExperiences(response.data);
+//         } else {
+//           setError("Invalid data format received from the server.");
+//         }
+//         setLoading(false);
+//       } catch (err) {
+//         setError("Failed to fetch experiences. Please try again later.");
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchExperiences();
+//   }, []);
+
+//   const handleCardClick = (id: string) => {
+//     navigate(`/viewexperience/${id}`);
+//   };
+
+//   // const handleViewComments = async (id: string, e: React.MouseEvent) => {
+//   //   e.stopPropagation(); 
+//   //   setSelectedExperienceId(id);
+//   //   try {
+//   //     const response = await axios.get(
+//   //       `http://localhost:3000/user/InterviewExperience/${id}/comments`
+//   //     );
+//   //     setComments(response.data.comments);
+//   //   } catch (error) {
+//   //     console.error("Error fetching comments:", error);
+//   //     setComments([]);
+//   //   }
+//   //   setShowModal(true);
+//   // };
+
+//   // const closeModal = () => {
+//   //   setShowModal(false);
+//   //   setComments([]);
+//   //   setSelectedExperienceId(null);
+//   // };
+
+//   if (loading) return <div className="text-center p-8">Loading...</div>;
+//   if (error) return <div className="text-center text-red-500 p-8">{error}</div>;
+
+//   return (
+//     <div className="w-full">
+//       <div className="pt-16">
+//         <h2 className="text-2xl font-bold text-center mt-6 mb-8">
+//           Interview Experiences
+//         </h2>
+//         <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {experiences.length > 0 ? (
+//             experiences.map((experience) => (
+//               <div key={experience.id} className="group relative">
+//                 <Card
+//                   className="h-full transform transition-all duration-300 hover:scale-105 cursor-pointer"
+//                   onClick={() => handleCardClick(experience.id)}
+//                 >
+//                   <CardContent className="p-12">
+//                     <div className="space-y-4">
+//                       <div>
+//                         <h3 className="text-xl font-semibold">
+//                           {experience.firstName} {experience.lastName}
+//                         </h3>
+//                         <p className="text-gray-600">
+//                           {experience.collegeName}, {experience.graduationYear}
+//                         </p>
+//                       </div>
+
+//                       <div>
+//                         <h4 className="text-lg font-medium">
+//                           Latest Experience:
+//                         </h4>
+//                         {experience.experiences[0] && (
+//                           <div className="ml-4 mt-2">
+//                             <p>
+//                               <span className="font-medium">Company:</span>{" "}
+//                               {experience.experiences[0].company}
+//                             </p>
+//                             <p>
+//                               <span className="font-medium">Year:</span>{" "}
+//                               {experience.experiences[0].year}
+//                             </p>
+//                           </div>
+//                         )}
+//                       </div>
+
+//                       <div>
+//                         <h4 className="text-lg font-medium">Latest Offer:</h4>
+//                         {experience.offers[0] && (
+//                           <div className="ml-4 mt-2">
+//                             <p>
+//                               <span className="font-medium">Company:</span>{" "}
+//                               {experience.offers[0].company}
+//                             </p>
+//                             <p>
+//                               <span className="font-medium">Package:</span>{" "}
+//                               {experience.offers[0].package || "N/A"}
+//                             </p>
+//                             <p>
+//                               <span className="font-medium">Status:</span>{" "}
+//                               <span
+//                                 className={
+//                                   experience.offers[0].status === "Selected"
+//                                     ? "text-green-600"
+//                                     : "text-red-600"
+//                                 }
+//                               >
+//                                 {experience.offers[0].status}
+//                               </span>
+//                             </p>
+//                           </div>
+//                         )}
+//                       </div>
+
+//                     </div>
+//                   </CardContent>
+
+//                   <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+//                     <div className="p-6 h-full flex flex-col justify-center items-center text-center bg-blue-50 rounded-lg">
+//                       <h3 className="text-xl font-semibold mb-2">Mastercard</h3>
+//                       <p className="text-gray-600 mb-2">New York, USA</p>
+//                       <p className="text-gray-600 mb-4">
+//                         A leading global payments and technology company
+//                         transforming the way the world pays and gets paid.
+//                       </p>
+//                       <a
+//                         href="https://www.mastercard.com"
+//                         target="_blank"
+//                         rel="noopener noreferrer"
+//                         className="text-blue-500 hover:text-blue-700 underline"
+//                         onClick={(e) => e.stopPropagation()}
+//                       >
+//                         Visit Company Website
+//                       </a>
+                     
+//                       {/* <div className="mt-4">
+//                         <button
+//                           onClick={(e) => handleViewComments(experience.id, e)}
+//                           className="px-4 py-2 bg-gradient-to-r from-blue-300 to-blue-500 text-white rounded hover:from-blue-400 hover:to-blue-600 transition-all duration-300 shadow-md hover:shadow-lg"
+//                         >
+//                           View Comments
+//                         </button>
+//                       </div> */}
+
+
+//                     </div>
+//                   </div>
+//                 </Card>
+//               </div>
+//             ))
+//           ) : (
+//             <p className="text-center col-span-3">
+//               No interview experiences found.
+//             </p>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default InterviewExperience;
+
+
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+
+interface IRound {
+  name: string;
+  experience: string;
+}
+
+interface IExperience {
+  company: string;
+  year: string;
+  rounds: IRound[];
+}
+
+interface IOffer {
+  company: string;
+  status: "Selected" | "Rejected";
+  package?: string;
+}
+
+
+export interface IExperienceSubmission {
+  id: string;
+  firstName: string;
+  lastName: string;
+  collegeName: string;
+  graduationYear: string;
+  experiences: IExperience[];
+  offers: IOffer[];
+}
+
+
+export interface CollegeComapny {
     id: string;
-    firstName: string;
-    location: string;
-    rating: number;
+    name: string;
+    company: string;
   }
   
-  const people: Person[] = [
-    {
-      id: "1",
-      firstName: "John",
-      location: "Software Engineer",
-      rating: 4.5
-    },
-    {
-      id: "2",
-      firstName: "Emma",
-      location: "Product Manager",
-      rating: 4.3
-    },
-    {
-      id: "3",
-      firstName: "Michael",
-      location: "Data Scientist",
-      rating: 4.7
-    },
-    {
-      id: "4",
-      firstName: "Sarah",
-      location: "UX Designer",
-      rating: 4.2
-    },
-    {
-      id: "5",
-      firstName: "David",
-      location: "Full Stack Developer",
-      rating: 4.9
-    }
-  ];
+
+  const colleges: CollegeComapny[] = [
+      {
+        id: "1",
+        name: "Dharmsinh Desai University",
+        company: "MasterCard"
+        
+      },
+      {
+        id: "2",
+        name: "Dharmsinh Desai University",
+        company: "Infosys"
+      },
+      {
+        id: "3",
+        name: "DAIICT",
+        company: "Google"
+      },
+      {
+        id: "4",
+        name: "LD University",
+        company: "Microsoft"
+      },
+      {
+        id: "5",
+        name: "IIT Bombay",
+        company: "Apple"
+      }
+    ];
+
+
+
+const CompanyExperience = () => {
+  const [experiences, setExperiences] = useState<IExperienceSubmission[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchExperiences = async () => {
+//       try {
+//         const response = await axios.get(
+//           "http://localhost:3000/user/InterviewExperience"
+//         );
+//         if (Array.isArray(response.data)) {
+//           setExperiences(response.data);
+//         } else {
+//           setError("Invalid data format received from the server.");
+//         }
+//         setLoading(false);
+//       } catch (err) {
+//         setError("Failed to fetch experiences. Please try again later.");
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchExperiences();
+//   }, []);
+
+
+
+  const handleCardClick = (id: string) => {
+    navigate(`/viewexperience/${id}`);
+  };
   
-  export default function CompanyExperience() {
-    const [selectedPerson, setSelectedPerson] = useState(people[0]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const navigate = useNavigate();
-  
-    const filteredPeople = people.filter((person) =>
-      person.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  
-    const handleCompanySelect = (companyName: string) => {
-      navigate(`/company/${encodeURIComponent(companyName)}`);
-    };
-  
-    return (
-      <div className="h-screen p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        <motion.div
+  if (error) return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="text-center text-red-500 p-8"
+    >
+      {error}
+    </motion.div>
+  );
+
+  return (
+    <div className="w-full h-full overflow-y-auto custom-scrollbar">
+      <div  className="space-y-6">
+        <motion.h2 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 text-center"
+          className="text-2xl font-bold text-white mb-6"
         >
-          <motion.div
-            className="flex items-center justify-center mb-1"
-            whileHover={{ scale: 1.05 }}
-          >
-            <User2 className="w-6 h-6 text-white/80 mr-2" />
-            <h1 className="text-2xl font-bold text-white">Experience Explorer</h1>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-sm text-gray-400"
-          >
-            Discover interview experiences from professionals
-          </motion.p>
-        </motion.div>
-  
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="h-[calc(100vh-120px)] rounded-xl border border-white/10 shadow-2xl bg-gray-900/50 backdrop-blur-xl"
-        >
-          <ResizablePanel defaultSize={35} minSize={30} className="p-3">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-3 relative"
-            >
-              <input
-                type="text"
-                placeholder="Search people..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-              />
-              <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
-            </motion.div>
-  
-            <div className="space-y-2 overflow-y-auto h-[calc(100vh-220px)] custom-scrollbar">
-              {filteredPeople.map((person, index) => (
-                <motion.div
-                  key={person.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
+          Interview Experiences
+        </motion.h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {colleges.length > 0 ? (
+            colleges.map((college, index) => (
+              <motion.div 
+                key={college.id} 
+                className="group relative"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card
+                  className="h-full transform transition-all duration-300 hover:scale-105 cursor-pointer bg-white/5 border-white/10"
+                  onClick={() => handleCardClick(college.id)}
                 >
-                  <motion.button
-                    onClick={() => setSelectedPerson(person)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                      selectedPerson.id === person.id
-                        ? "bg-white/10 border-2 border-white/20"
-                        : "bg-white/5 hover:bg-white/10 border border-white/10"
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium text-white">{person.firstName}</span>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="ml-1 text-sm text-gray-300">
-                          {person.rating}
-                        </span>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">
+                          {college.name}
+                        </h3>
+                        <p className="text-gray-400">
+                          {college.company}
+                        </p>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-400 mt-1">{person.location}</p>
-                  </motion.button>
-                </motion.div>
-              ))}
-            </div>
-          </ResizablePanel>
-  
-          <ResizableHandle className="bg-white/10 hover:bg-white/20 transition-colors" />
-  
-          <ResizablePanel defaultSize={65} className="p-4">
-            <InterviewExperience onCompanySelect={handleCompanySelect} />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+                  </CardContent>
+
+                  <div className="absolute inset-0 bg-blue-900/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                    <div className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-semibold mb-2 text-white">Visit Profile</h3>
+                      <p className="text-blue-200 mb-4">
+                        Click to view detailed interview experience and more insights
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            <p className="text-center col-span-2 text-gray-400">
+              No interview experiences found.
+            </p>
+          )}
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
+};
+
+export default CompanyExperience;

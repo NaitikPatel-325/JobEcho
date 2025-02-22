@@ -6,7 +6,8 @@ import {
   import { useState } from "react";
   import { Search, GraduationCap, Star } from "lucide-react";
   import { motion } from "framer-motion";
-  import InterviewExperience from "./InterviewExperience";
+import InterviewExperience from "./InterviewExperience";
+import CompanyExperience from "./CompanyExperience";
   
   export interface College {
     id: string;
@@ -48,32 +49,13 @@ import {
     }
   ];
   
-  export interface Experience {
-    id: string;
-    firstName: string;
-    lastName: string;
-    college: string;
-    graduationYear: number;
-    latestExperience: string;
-    latestOffer: string;
-  }
-  
   export default function CollegeCompanies() {
     const [selectedCollege, setSelectedCollege] = useState(colleges[0]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
   
     const filteredColleges = colleges.filter((college) =>
       college.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  
-    const handleExperienceSelect = (experience: Experience) => {
-      setSelectedExperience(experience);
-      const collegeMatch = colleges.find(c => c.name === experience.college);
-      if (collegeMatch) {
-        setSelectedCollege(collegeMatch);
-      }
-    };
   
     return (
       <div className="h-screen p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
@@ -112,7 +94,7 @@ import {
             >
               <input
                 type="text"
-                placeholder={selectedExperience ? "Search experiences..." : "Search colleges..."}
+                placeholder="Search colleges..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
@@ -129,12 +111,7 @@ import {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <motion.button
-                    onClick={() => {
-                      setSelectedCollege(college);
-                      if (selectedExperience?.college !== college.name) {
-                        setSelectedExperience(null);
-                      }
-                    }}
+                    onClick={() => setSelectedCollege(college)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
@@ -144,11 +121,7 @@ import {
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-white">
-                        {selectedExperience && selectedExperience.college === college.name
-                          ? `${selectedExperience.firstName}'s Experience`
-                          : college.name}
-                      </span>
+                      <span className="font-medium text-white">{college.name}</span>
                       <div className="flex items-center">
                         <Star className="w-4 h-4 text-yellow-400 fill-current" />
                         <span className="ml-1 text-sm text-gray-300">
@@ -166,10 +139,8 @@ import {
           <ResizableHandle className="bg-white/10 hover:bg-white/20 transition-colors" />
   
           <ResizablePanel defaultSize={65} className="p-4">
-            <InterviewExperience 
-              selectedCollege={selectedCollege}
-              onExperienceSelect={handleExperienceSelect}
-            />
+            {/* <InterviewExperience /> */}
+            <CompanyExperience  />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

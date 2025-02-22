@@ -253,7 +253,6 @@ const InterviewExperience = () => {
   const [experiences, setExperiences] = useState<IExperienceSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -264,6 +263,7 @@ const InterviewExperience = () => {
         );
         if (Array.isArray(response.data)) {
           setExperiences(response.data);
+          console.log(response.data);
         } else {
           setError("Invalid data format received from the server.");
         }
@@ -278,14 +278,6 @@ const InterviewExperience = () => {
   }, []);
 
   const handleCardClick = (id: string) => {
-    if (selectedExperienceId === id) {
-      setSelectedExperienceId(null); // Deselect if already selected
-    } else {
-      setSelectedExperienceId(id); // Select the new experience
-    }
-  };
-
-  const handleNavigate = (id: string) => {
     navigate(`/viewexperience/${id}`);
   };
 
@@ -311,7 +303,7 @@ const InterviewExperience = () => {
 
   return (
     <div className="w-full h-full overflow-y-auto custom-scrollbar">
-      <div className="space-y-6">
+      <div  className="space-y-6">
         <motion.h2 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -330,9 +322,7 @@ const InterviewExperience = () => {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card
-                  className={`h-full transform transition-all duration-300 hover:scale-105 cursor-pointer bg-white/5 border-white/10 ${
-                    selectedExperienceId === experience.id ? 'ring-2 ring-blue-500' : ''
-                  }`}
+                  className="h-full transform transition-all duration-300 hover:scale-105 cursor-pointer bg-white/5 border-white/10"
                   onClick={() => handleCardClick(experience.id)}
                 >
                   <CardContent className="p-6">
@@ -342,44 +332,25 @@ const InterviewExperience = () => {
                           {experience.firstName} {experience.lastName}
                         </h3>
                         <p className="text-gray-400">
-                          {selectedExperienceId === experience.id ? experience.firstName : experience.collegeName}, {experience.graduationYear}
+                          {experience.collegeName}, {experience.graduationYear}
                         </p>
                       </div>
 
                       <div>
                         <h4 className="text-lg font-medium text-white">
-                          {selectedExperienceId === experience.id ? "All Experiences:" : "Latest Experience:"}
+                          Latest Experience:
                         </h4>
-                        {selectedExperienceId === experience.id ? (
-                          // Show all experiences when selected
-                          <div className="ml-4 mt-2 text-gray-300 space-y-4">
-                            {experience.experiences.map((exp, idx) => (
-                              <div key={idx} className="border-l-2 border-blue-500 pl-3">
-                                <p>
-                                  <span className="font-medium">Company:</span>{" "}
-                                  {exp.company}
-                                </p>
-                                <p>
-                                  <span className="font-medium">Year:</span>{" "}
-                                  {exp.year}
-                                </p>
-                              </div>
-                            ))}
+                        {experience.experiences[0] && (
+                          <div className="ml-4 mt-2 text-gray-300">
+                            <p>
+                              <span className="font-medium">Company:</span>{" "}
+                              {experience.experiences[0].company}
+                            </p>
+                            <p>
+                              <span className="font-medium">Year:</span>{" "}
+                              {experience.experiences[0].year}
+                            </p>
                           </div>
-                        ) : (
-                          // Show only latest experience when not selected
-                          experience.experiences[0] && (
-                            <div className="ml-4 mt-2 text-gray-300">
-                              <p>
-                                <span className="font-medium">Company:</span>{" "}
-                                {experience.experiences[0].company}
-                              </p>
-                              <p>
-                                <span className="font-medium">Year:</span>{" "}
-                                {experience.experiences[0].year}
-                              </p>
-                            </div>
-                          )
                         )}
                       </div>
 
@@ -415,26 +386,10 @@ const InterviewExperience = () => {
 
                   <div className="absolute inset-0 bg-blue-900/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                     <div className="p-6 h-full flex flex-col justify-center items-center text-center">
-                      <h3 className="text-xl font-semibold mb-2 text-white">
-                        {selectedExperienceId === experience.id ? 'View Full Profile' : 'Select Experience'}
-                      </h3>
+                      <h3 className="text-xl font-semibold mb-2 text-white">Visit Profile</h3>
                       <p className="text-blue-200 mb-4">
-                        {selectedExperienceId === experience.id 
-                          ? 'Click to view detailed interview experience and more insights'
-                          : 'Click to view all experiences'
-                        }
+                        Click to view detailed interview experience and more insights
                       </p>
-                      {selectedExperienceId === experience.id && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleNavigate(experience.id);
-                          }}
-                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                        >
-                          View Full Profile
-                        </button>
-                      )}
                     </div>
                   </div>
                 </Card>
