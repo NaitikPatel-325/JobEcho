@@ -4,75 +4,62 @@ import {
     ResizablePanelGroup,
   } from "@/components/ui/resizable";
   import { useState } from "react";
-  import { Search, GraduationCap, Star } from "lucide-react";
+  import { Search, User2, Star } from "lucide-react";
   import { motion } from "framer-motion";
   import InterviewExperience from "./InterviewExperience";
+  import { useNavigate } from "react-router-dom";
   
-  export interface College {
+  export interface Person {
     id: string;
-    name: string;
+    firstName: string;
     location: string;
     rating: number;
   }
   
-  const colleges: College[] = [
+  const people: Person[] = [
     {
       id: "1",
-      name: "Dharmsinh Desai University",
-      location: "Nadiad, Gujarat",
+      firstName: "John",
+      location: "Software Engineer",
       rating: 4.5
     },
     {
       id: "2",
-      name: "Nirma University",
-      location: "Ahmedabad, Gujarat",
+      firstName: "Emma",
+      location: "Product Manager",
       rating: 4.3
     },
     {
       id: "3",
-      name: "DAIICT",
-      location: "Gandhinagar, Gujarat",
+      firstName: "Michael",
+      location: "Data Scientist",
       rating: 4.7
     },
     {
       id: "4",
-      name: "LD University",
-      location: "Ahmedabad, Gujarat",
+      firstName: "Sarah",
+      location: "UX Designer",
       rating: 4.2
     },
     {
       id: "5",
-      name: "IIT Bombay",
-      location: "Mumbai, Maharashtra",
+      firstName: "David",
+      location: "Full Stack Developer",
       rating: 4.9
     }
   ];
   
-  export interface Experience {
-    id: string;
-    firstName: string;
-    lastName: string;
-    college: string;
-    graduationYear: number;
-    latestExperience: string;
-    latestOffer: string;
-  }
-  
-  export default function CollegeCompanies() {
-    const [selectedCollege, setSelectedCollege] = useState(colleges[0]);
+  export default function CompanyExperience() {
+    const [selectedPerson, setSelectedPerson] = useState(people[0]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+    const navigate = useNavigate();
   
-    const filteredColleges = colleges.filter((college) =>
-      college.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredPeople = people.filter((person) =>
+      person.firstName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   
-    const handleExperienceSelect = (experience: Experience) => {
-      setSelectedExperience(experience);
-      const collegeMatch = colleges.find(c => c.name === experience.college);
-      if (collegeMatch) {
-        setSelectedCollege(collegeMatch);
-      }
+    const handleCompanySelect = (companyName: string) => {
+      navigate(`/company/${encodeURIComponent(companyName)}`);
     };
   
     return (
@@ -86,8 +73,8 @@ import {
             className="flex items-center justify-center mb-1"
             whileHover={{ scale: 1.05 }}
           >
-            <GraduationCap className="w-6 h-6 text-white/80 mr-2" />
-            <h1 className="text-2xl font-bold text-white">College Explorer</h1>
+            <User2 className="w-6 h-6 text-white/80 mr-2" />
+            <h1 className="text-2xl font-bold text-white">Experience Explorer</h1>
           </motion.div>
           <motion.p
             initial={{ opacity: 0 }}
@@ -95,7 +82,7 @@ import {
             transition={{ delay: 0.2 }}
             className="text-sm text-gray-400"
           >
-            Discover your perfect educational journey
+            Discover interview experiences from professionals
           </motion.p>
         </motion.div>
   
@@ -112,7 +99,7 @@ import {
             >
               <input
                 type="text"
-                placeholder={selectedExperience ? "Search experiences..." : "Search colleges..."}
+                placeholder="Search people..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
@@ -121,42 +108,33 @@ import {
             </motion.div>
   
             <div className="space-y-2 overflow-y-auto h-[calc(100vh-220px)] custom-scrollbar">
-              {filteredColleges.map((college, index) => (
+              {filteredPeople.map((person, index) => (
                 <motion.div
-                  key={college.id}
+                  key={person.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <motion.button
-                    onClick={() => {
-                      setSelectedCollege(college);
-                      if (selectedExperience?.college !== college.name) {
-                        setSelectedExperience(null);
-                      }
-                    }}
+                    onClick={() => setSelectedPerson(person)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                      selectedCollege.id === college.id
+                      selectedPerson.id === person.id
                         ? "bg-white/10 border-2 border-white/20"
                         : "bg-white/5 hover:bg-white/10 border border-white/10"
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-white">
-                        {selectedExperience && selectedExperience.college === college.name
-                          ? `${selectedExperience.firstName}'s Experience`
-                          : college.name}
-                      </span>
+                      <span className="font-medium text-white">{person.firstName}</span>
                       <div className="flex items-center">
                         <Star className="w-4 h-4 text-yellow-400 fill-current" />
                         <span className="ml-1 text-sm text-gray-300">
-                          {college.rating}
+                          {person.rating}
                         </span>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-400 mt-1">{college.location}</p>
+                    <p className="text-sm text-gray-400 mt-1">{person.location}</p>
                   </motion.button>
                 </motion.div>
               ))}
@@ -166,10 +144,7 @@ import {
           <ResizableHandle className="bg-white/10 hover:bg-white/20 transition-colors" />
   
           <ResizablePanel defaultSize={65} className="p-4">
-            <InterviewExperience 
-              selectedCollege={selectedCollege}
-              onExperienceSelect={handleExperienceSelect}
-            />
+            <InterviewExperience onCompanySelect={handleCompanySelect} />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
