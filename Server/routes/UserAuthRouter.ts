@@ -1,6 +1,7 @@
 import express from "express";
 import { getUserDetails, googleSign, logout, updateUserDetails } from "../controller/UserController";
 import { getExperiences, submitExperience } from "../controller/ExperienceController";
+import { getColleges } from "../controller/CollageController";
 // import { addComment, getComments } from "../controller/CommentController";
 // import { getExperienceById, getExperiences, getExperiencesByCompany, submitExperience } from "../controller/ExperienceController";
 
@@ -10,6 +11,7 @@ UserAuthRouter.post("/googleSignin", googleSign);
 UserAuthRouter.get("/user-details", getUserDetails);
 UserAuthRouter.put("/update-user-details", updateUserDetails);
 UserAuthRouter.post("/submit-experience", submitExperience);
+UserAuthRouter.get("/getallCollages", getColleges);
 // UserAuthRouter.get("/InterviewExperience", getExperiences);
 UserAuthRouter.get("/InterviewExperience", getExperiences);
 // UserAuthRouter.get("/InterviewExperience/:id", getExperienceById); // Fetch experience by ID
