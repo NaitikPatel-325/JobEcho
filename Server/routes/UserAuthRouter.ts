@@ -13,7 +13,8 @@ UserAuthRouter.put("/update-user-details", updateUserDetails);
 UserAuthRouter.post("/submit-experience", submitExperience);
 UserAuthRouter.get("/getallCollages", getColleges);
 // UserAuthRouter.get("/getallCollageswithCompany", getCollegesandcompany);
-UserAuthRouter.get("/getCollegesandcompany", getCompaniesByCollege);
+UserAuthRouter.get("/getCollegesandcompany/:id", getCompaniesByCollege);
+
 
 // UserAuthRouter.get("/InterviewExperience", getExperiences);
 UserAuthRouter.get("/InterviewExperience", getExperiences);

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import College from "../models/Collage"; 
-import Experience from "../models/Experience";
+import Company from "../models/Company";
+import { promises } from "dns";
 
 
 export const getColleges = async (req: Request, res: Response) => {
@@ -22,50 +23,20 @@ export const getCollegeById = async (req: Request, res: Response) => {
     }
 };
 
-// export const getCompaniesByCollege = async (req: Request, res: Response) => {
-//   try {
-//     const {collegeId } = req.query;
-//     let college;
-//  if (collegeId) {
-//       college = await College.findOne({ collegeId }).populate("companies");
-//     } else {
-//       return res.status(400).json({ success: false, message: "Provide id or collegeId" });
-//     }
-
-//     if (!college) {
-//       return res.status(404).json({ success: false, message: "College not found" });
-//     }
-
-//     res.status(200).json({ success: true, data: college.companies }); // Return only companies
-//   } catch (error) {
-//     console.error("Error fetching companies by college:", error);
-//     res.status(500).json({ success: false, message: "Internal server error" });
-//   }
-// };
-
-
-export const getCompaniesByCollege = async (req: Request, res: Response) => {
+export const getCompaniesByCollege = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { collegeId } = req.query;
-
+    const collegeId = req.query.id as string;
     if (!collegeId) {
-      return res.status(400).json({ success: false, message: "Provide collegeId" });
+      res.status(400).json({ error: "College ID is required" });
+      return;
     }
 
-    const college = await College.findOne({ collegeId }).populate("companies");
+    const companies = await Company.find({ collegeIds: { $in: [collegeId] } });
 
-    if (!college) {
-      return res.status(404).json({ success: false, message: "College not found" });
-    }
-
-    const companiesArray = college.companies.map((company) => ({
-      company: company, // Full company object
-      id: company._id, // Extracting _id separately
-    }));
-
-    return res.status(200).json({ success: true, data: companiesArray });
+    res.status(200).json(companies);
   } catch (error) {
-    console.error("Error fetching companies by college:", error);
-    return res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
