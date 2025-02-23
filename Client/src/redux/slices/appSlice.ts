@@ -6,15 +6,21 @@ interface College {
   company_id: string[];
 }
 
-interface ICollegeType{
+export interface CollegeCompany {
+  id: string;
+  name: string;
+  company: string;
+}
+
+interface ICollegeType {
   collegeName: string;
   location: string;
   briefDescription?: string;
   websiteUrl?: string;
   contactInformation: string;
   companies: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
 }
 
 
@@ -25,6 +31,7 @@ interface AppState {
   currentWidth: number;
   college: College;
   currentCollege: ICollegeType;
+  currentCollegeCompany: CollegeCompany[];
 }
 
 const initialState: AppState = {
@@ -44,10 +51,12 @@ const initialState: AppState = {
     websiteUrl: "",
     contactInformation: "",
     companies: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: Date.now(), // Store as a timestamp
+    updatedAt: Date.now(),
   },
+  currentCollegeCompany: [],
 };
+
 
 
 const appSlice = createSlice({
@@ -66,9 +75,7 @@ const appSlice = createSlice({
     setCurrentWidth: (state, action: PayloadAction<number>) => {
       state.currentWidth = action.payload;
     },
-    updateCurrentCollege: (state, action: PayloadAction<any>) => {
-      state.currentCollege = action.payload;
-    },
+
     setCollege: (state, action: PayloadAction<string>) => {
       state.college = {
         ...state.college,
@@ -97,8 +104,14 @@ const appSlice = createSlice({
       state.college.companies.push(action.payload.companyName);
       state.college.company_id.push(action.payload.companyId);
     },
+    setCurrentCollegeCompanies: (state, action: PayloadAction<CollegeCompany[]>) => {
+      state.currentCollegeCompany = action.payload;
+    },
+    addCollegeCompany: (state, action: PayloadAction<CollegeCompany>) => {
+      state.currentCollegeCompany.push(action.payload);
+    },
   },
 });
 
-export const { updateCurrentUser, updateIsLoggedIn, setCurrentWidth, updateLoginMethod, setCollege, setCompanies, addCompany,updateCurrentCollege } = appSlice.actions;
+export const { updateCurrentUser, updateIsLoggedIn, setCurrentWidth, updateLoginMethod, setCollege, setCompanies, addCompany,updateCurrentCollege,addCollegeCompany,setCurrentCollegeCompanies } = appSlice.actions;
 export default appSlice.reducer;
