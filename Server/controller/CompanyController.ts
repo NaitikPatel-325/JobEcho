@@ -56,3 +56,23 @@ export const getCompanyDetailsById = async (req: Request, res: Response) => {
 
 
 
+export const getCompanyDetailsByName = async (req: Request, res: Response) => {
+  try {
+      const {name} = req.params;
+      console.log(name);
+      const companyDetails = await Company.findOne({
+          name: {
+              $regex: new RegExp(name, "i")
+          }
+      });
+      if(!companyDetails){
+          res.status(404).json({message: "Company not found"});
+          return;
+      }
+      res.status(200).json(companyDetails);
+  } catch (error) {
+      console.error("Error fetching companyDetails:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+

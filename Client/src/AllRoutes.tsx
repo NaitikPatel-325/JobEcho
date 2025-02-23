@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import InterviewExperiences from "./pages/InterviewExperience";
+import CompanyAnalysis from "./components/CompanyAnalysis";
 
 const Home = lazy(() => import("./pages/Home"));
 const Landing = lazy(() => import("./pages/Landing"));
@@ -37,6 +38,8 @@ export default function AllRoutes() {
         <Route path="/user-experience-form-1" element={<NewExperienceForm />} />
         <Route path="/CollegeCompanies" element={<CollegeCompanies />} />
         <Route path="/chat" element={ <Chat/> }/>
+        <Route path="/companyanalysis" element={<CompanyAnalysis/>}/>
+
 
 
         {/* <Route path="/comments" element={<Navbar />} /> */}
