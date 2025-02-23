@@ -67,7 +67,6 @@ export default function NewExperienceForm() {
         const data = await response.json();
         // Assuming each item has college.collegeName
         const collegeNames = data.map((college: any) => college.collegeName);
-        collegeNames.push("Other");
         setColleges(collegeNames);
       } catch (error) {
         console.error("Error fetching colleges:", error);
@@ -81,7 +80,6 @@ export default function NewExperienceForm() {
         const data = await response.json();
         // Assuming each item has company.name
         const companyNames = data.map((company: any) => company.name);
-        companyNames.push("Other");
         setCompanies(companyNames);
       } catch (error) {
         console.error("Error fetching companies:", error);
