@@ -195,9 +195,11 @@ export const getAnalysis = async (req: Request, res: Response): Promise<void> =>
       .map(exp => `Round ${exp.roundName}: ${exp.experience}`)
       .join("; ");
 
-    const prompt = `The company has recorded the following interview experiences: ${summary}. 
-Please provide a concise 2-3 line analysis of the company's overall interview process. 
-Each point should highlight a strength or weakness observed in the rounds and include actionable recommendations for future candidates.`;
+      const prompt = `The company has recorded the following interview experiences: ${summary}. 
+      Please provide a 1-2 line analysis of the company's overall interview process. 
+      Each point should highlight a strength or weakness observed in the rounds and include actionable recommendations for future candidates without any special characters
+      `;
+      
 
     const analysis = await generatePromptResponse(prompt);
     
