@@ -41,37 +41,11 @@ JobEcho is a web-based platform designed to help students track their placement 
 ## Tech Stack
 
 - **Frontend:** React.js, Redux
-- **Backend:** Node.js, Express.js
+- **Backend:** Node.js, Express.js, Typescript
+- **AI/ML:** Gemini API for AI-driven insights
 - **Database:** MongoDB
 - **Authentication:** Google Auth
 
-## Installation & Setup
-
-### 1. Clone the repository:
-```sh
-git clone https://github.com/your-repo/jobecho.git  
-cd jobecho  
-```
-
-### 2. Install Dependencies:
-```sh
-npm install  
-```
-
-### 3. Configure Environment Variables:
-Create a `.env` file in the root directory and add the necessary environment variables (database URL, API keys, etc.).
-
-### 4. Start the Server:
-```sh
-cd server  
-npm start  
-```
-
-### 5. Start the Client:
-```sh
-cd client  
-npm run dev  
-```
 
 ## Contributing
 We welcome contributions! Feel free to submit issues or pull requests to improve the platform.
