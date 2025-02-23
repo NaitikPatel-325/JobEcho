@@ -10,6 +10,7 @@ interface IRound {
 }
 
 interface IExperience {
+  name: boolean;
   company: string;
   year: string;
   rounds: IRound[];
@@ -152,7 +153,7 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
                         {experience.offers?.length > 0 && (
                           <div className="ml-4 mt-2 text-gray-300">
                             <p>
-                              <span className="font-medium">Company:</span> {experience.offers[0].company?.name || "N/A"}
+                              <span className="font-medium">Company:</span> {experience.offers[0].company || "N/A"}
                             </p>
                             {experience.offers[0]?.package && (
                               <p>
