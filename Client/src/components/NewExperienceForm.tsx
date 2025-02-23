@@ -48,7 +48,9 @@ export default function NewExperienceForm() {
     }[]
   >([]);
   const [results, setResults] = useState<
-    { company: string; status: string; package?: string }[]
+    {
+      lpa?: string; company: string; status: string; package?: string 
+}[]
   >([]);
 
   const addNewExperience = () => {
@@ -499,7 +501,7 @@ export default function NewExperienceForm() {
                             </Label>
                             <Input
                               placeholder="LPA Offered"
-                              value={result.lpa || ""}
+                              value={result?.lpa || ""}
                               onChange={(e) => {
                                 const newResults = [...results];
                                 newResults[i].lpa = e.target.value;
