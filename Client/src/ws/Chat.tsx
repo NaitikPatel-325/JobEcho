@@ -88,7 +88,7 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="chat-container flex flex-col h-[47vw] p-6 bg-black text-white w-[50vw]">
+    <div className="chat-container flex flex-col h-[40vw] p-6 bg-black text-white w-[50vw]">
       <div className="chat-window flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg, index) => (
           <div

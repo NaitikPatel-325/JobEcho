@@ -63,7 +63,10 @@ export default function NewExperienceForm() {
   useEffect(() => {
     const fetchCollegeNames = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/getallCollages");
+        const response = await fetch("http://localhost:3000/user/getallCollages", {
+          method: "GET", 
+          credentials: "include" // Allows cookies to be sent with the request
+      });
         const data = await response.json();
         // Assuming each item has college.collegeName
         const collegeNames = data.map((college: any) => college.collegeName);
@@ -76,7 +79,10 @@ export default function NewExperienceForm() {
     // Fetch companies once
     const fetchAllCompanies = async () => {
       try {
-        const response = await fetch("http://localhost:3000/company");
+        const response = await fetch("http://localhost:3000/company", {
+          method: "GET", 
+          credentials: "include" // Allows cookies to be sent with the request
+      });
         const data = await response.json();
         // Assuming each item has company.name
         const companyNames = data.map((company: any) => company.name);
@@ -133,6 +139,7 @@ export default function NewExperienceForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
+        credentials: "include"
       });
 
       const result = await response.json();
