@@ -11,7 +11,6 @@ import {
 } from "./ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ChevronLeft, Plus, X } from "lucide-react";
-import './componentStyles/NewExperienceForm.css'
 
 const formSteps = ["Personal", "Experience", "Results"] as const;
 
@@ -48,7 +47,9 @@ export default function NewExperienceForm() {
     }[]
   >([]);
   const [results, setResults] = useState<
-    { company: string; status: string; lpa?: string }[]
+    {
+      lpa?: string; company: string; status: string; package?: string 
+}[]
   >([]);
 
   const addNewExperience = () => {
@@ -499,7 +500,7 @@ export default function NewExperienceForm() {
                             </Label>
                             <Input
                               placeholder="LPA Offered"
-                              value={result.lpa || ""}
+                              value={result?.lpa || ""}
                               onChange={(e) => {
                                 const newResults = [...results];
                                 newResults[i].lpa = e.target.value;

@@ -15,6 +15,13 @@ import { googleLogout } from "@react-oauth/google";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "./ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Header() {
   const containerRef = useRef(null);
@@ -26,10 +33,11 @@ export default function Header() {
   const isLoggedIn = useSelector(
     (state: RootState) => state.appSlice.isLoggedIn
   );
-  const [logoutMutation] = useLogoutMutation();
+  const currentUser = useSelector((state: RootState) => state.appSlice.user);
   const loginMethod = useSelector(
     (state: RootState) => state.appSlice.loginMethod
   );
+  const [logoutMutation] = useLogoutMutation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +58,6 @@ export default function Header() {
       Cookies.remove("token");
 
       setTimeout(() => dispatch(setCurrentWidth(window.innerWidth)), 0);
-
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -77,41 +84,102 @@ export default function Header() {
 
         {/* Navigation Links */}
         <nav className="md:flex md:items-center md:w-auto w-full hidden md:block">
-        <ul className="md:flex items-center justify-center text-base text-gray-600">
-  <li>
-    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/home">
-      Home
-    </a>
-  </li>
-  <li>
-    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/features">
-      Features
-    </a>
-  </li>
-  {isLoggedIn ? (
-    <li>
-      <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/user-experience-form-1">
-        Share Experience
-      </a>
-    </li>
-  ) : null}
-  <li>
-    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/InterviewExperience-1">
-      Interview Experiences
-    </a>
-  </li>
-</ul>
+          <ul className="md:flex items-center justify-center text-base text-gray-600">
+            <li>
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/home"
+              >
+                Home
+              </a>
+            </li>
 
+            <li>
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/user-experience-form-1"
+              >
+                Share Experience
+              </a>
+            </li>
+
+            <li>
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/CollegeCompanies"
+              >
+                Interview Experiences
+              </a>
+            </li>
+          </ul>
+
+          <ul className="md:flex items-center justify-center text-base text-gray-400">
+            <li>
+              <a
+                href="/home"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                href="/features"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
+                Features
+              </a>
+            </li>
+            {isLoggedIn && (
+              <li>
+                <a
+                  href="/user-experience-form-1"
+                  className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+                >
+                  Share Experience
+                </a>
+              </li>
+            )}
+            <li>
+              <a
+                href="/InterviewExperience-1"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
+                Interview Experiences
+              </a>
+            </li>
+          </ul>
         </nav>
 
         {/* Buttons / Auth Section */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           {windowWidth > 500 ? (
             <ul className="flex gap-4">
               {isLoggedIn ? (
-                <li>
-                  <Button onClick={handleLogout}>Logout</Button>
-                </li>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center">
+                      <Avatar>
+                        <AvatarImage
+                          src={currentUser?.picture || "/default-avatar.png"}
+                          alt="User Avatar"
+                        />
+                        <AvatarFallback>U</AvatarFallback>
+                      </Avatar>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-48 bg-black">
+                    <DropdownMenuItem className="text-white font-semibold !hover:bg-transparent !hover:text-white bg-black">
+                      Hello, {currentUser?.name || "User"}!
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer text-red-500 !hover:bg-transparent !hover:text-red-500"
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <li>
                   <Link to="/signup">
@@ -141,16 +209,13 @@ export default function Header() {
                       Home
                     </a>
                   </li>
-                  <li>
-                    <a href="/features" className="p-2 block">
-                      Features
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/user-experience-form" className="p-2 block">
-                      Share Experience
-                    </a>
-                  </li>
+                  {isLoggedIn && (
+                    <li>
+                      <a href="/user-experience-form" className="p-2 block">
+                        Share Experience
+                      </a>
+                    </li>
+                  )}
                   {isLoggedIn ? (
                     <li>
                       <Button onClick={handleLogout}>Logout</Button>
