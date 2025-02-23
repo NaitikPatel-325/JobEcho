@@ -13,7 +13,6 @@
   "dependencies": {
     "@bright-lab/react-dynamic-form": "^0.0.34",
     "@ionic/react": "^8.4.3",
-    "@nivo/sunburst": "^0.88.0",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-label": "^2.1.2",
@@ -42,7 +41,6 @@
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^2.1.7",
     "react-router-dom": "^7.2.0",
-    "react-vis": "^1.12.1",
     "recharts": "^2.15.1",
     "sunburst-chart": "^1.21.3",
     "tailwind-merge": "^3.0.1",

@@ -12,7 +12,6 @@ import InterviewExperience from "./InterviewExperience";
 import SunburstChart from "./sunburst";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import Histogram from "./histogram";
 import { setCompanies } from "@/redux/slices/appSlice";
 
 export interface College {
@@ -238,7 +237,7 @@ export default function CollegeCompanies() {
           
           <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
             <SunburstChart />
-            <Histogram />
+            {/* <Histogram /> */}   { /*   HISTOGRAM COMMENTED  */  }
           </div>
         </div>
       </div>
