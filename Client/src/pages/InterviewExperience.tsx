@@ -10,6 +10,7 @@ interface IRound {
 }
 
 interface IExperience {
+  name: boolean;
   company: string;
   year: string;
   rounds: IRound[];
@@ -40,14 +41,14 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
-        console.log("Fetching experiences for company_id:", company_id);
+        //console.log("Fetching experiences for company_id:", company_id);
         const response = await axios.get(
           `http://localhost:3000/experience/get-experience-by-company/${company_id}`
         );
 
         if (Array.isArray(response.data)) {
           setExperiences(response.data);
-          console.log("Received experiences:", response.data);
+          //console.log("Received experiences:", response.data);
         } else {
           setError("Invalid data format received from the server.");
         }
@@ -152,7 +153,7 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
                         {experience.offers?.length > 0 && (
                           <div className="ml-4 mt-2 text-gray-300">
                             <p>
-                              <span className="font-medium">Company:</span> {experience.offers[0].company?.name || "N/A"}
+                              <span className="font-medium">Company:</span> {experience.offers[0].company || "N/A"}
                             </p>
                             {experience.offers[0]?.package && (
                               <p>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { addCompany, setCollege, setCompanies, updateCompanies } from "@/redux/slices/appSlice";
+import { addCompany, setCollege, setCompanies } from "@/redux/slices/appSlice";
 
 export interface CollegeCompany {
   id: string;
@@ -12,20 +12,20 @@ export interface CollegeCompany {
 }
 
 interface CompanyExperienceProps {
-  selectedCollege: { id: string };
+  selectedCollege: {
+    name: string; id: string 
+};
 }
 
 const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
-  const [filteredColleges, setFilteredColleges] = useState<CollegeCompany[]>(
-    []
-  );
+  const [filteredColleges, setFilteredColleges] = useState<CollegeCompany[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [CompaniesForCollege, setCompaniesForCollege] = useState<string[]>([]);
-
-  console.log(selectedCollege);
-
+  const [collegecompanyavg, setCollegecompanyavg] = useState<number | null>(null);
+  const [cids, setCids] = useState<string[]>([]);
+  const [cnames, setCname] = useState<string[]>([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,8 +34,6 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
 
       setLoading(true);
       setError(null);
-
-      console.log(selectedCollege);
 
       try {
         const response = await fetch(
@@ -47,10 +45,15 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
         }
 
         const data: CollegeCompany[] = await response.json();
-        console.log("Inside Company Exp : ",data);
+        console.log("Inside Company Exp : ", data);
 
+        const companyIds = data.map(company => company._id);
+        const companyNames = data.map(company => company.name);
+
+        setCids(companyIds);
+        setCname(companyNames);
         
-        const companiesForCollege =  data.map(company => company.name);
+        const companiesForCollege = data.map(company => company.name);
         setCompaniesForCollege(companiesForCollege);
 
         dispatch(setCollege(""));
@@ -67,33 +70,48 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
     fetchCompanies();
   }, [dispatch, selectedCollege]);
 
-  const handleCardClick = (company: any) => {
-    console.log(company._id);
+  const handleCardClick = (company: CollegeCompany) => {
+    console.log("Selected Company ID:", company._id);
+
     dispatch(setCollege(company._id));
-  
-    CompaniesForCollege.forEach((companyName) => {
-      dispatch(addCompany(companyName));
-    });
-  
+    dispatch(addCompany({ companyName: company.name, companyId: company._id }));
+    dispatch(setCompanies({companyNames: cnames, companyIds: cids}));
+
     navigate(`/CollegeCompanies?id=${company._id}`);
   };
-  
 
   return (
-    <div className="w-full h-full overflow-y-auto custom-scrollbar">
-      <div className="space-y-6">
+    <div className="w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="space-y-8">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-2xl font-bold text-white mb-6"
+          className="text-3xl font-bold text-white text-center mb-8"
         >
           Interview Experiences
         </motion.h2>
 
-        {loading && <p className="text-center text-gray-400">Loading...</p>}
-        {error && <p className="text-center text-red-400">{error}</p>}
+        {loading && (
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-gray-400 text-lg"
+          >
+            Loading...
+          </motion.p>
+        )}
+        
+        {error && (
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-red-400 text-lg"
+          >
+            {error}
+          </motion.p>
+        )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {!loading && !error && filteredColleges.length > 0
             ? filteredColleges.map((college, index) => (
                 <motion.div
@@ -104,39 +122,27 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
                   transition={{ delay: index * 0.1 }}
                 >
                   <Card
-                    className="h-full transform transition-all duration-300 hover:scale-105 cursor-pointer bg-white/5 border-white/10"
+                    className="h-full transform transition-all duration-300 hover:scale-105 cursor-pointer bg-white/5 border-white/10 hover:bg-white/10"
                     onClick={() => handleCardClick(college)}
                   >
-                    <CardContent className="p-6">
+                    <CardContent className="p-8">
                       <div className="space-y-4">
                         <div>
-                          <h3 className="text-xl font-semibold text-white">
+                          <h3 className="text-2xl font-semibold text-white mb-2">
                             {college.name}
                           </h3>
-                          <p className="text-gray-400">{college.company}</p>
+                          <p className="text-gray-400 text-lg">{college.company}</p>
                         </div>
                       </div>
                     </CardContent>
-                    <div className="absolute inset-0 bg-blue-900/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                      <div className="p-6 h-full flex flex-col justify-center items-center text-center">
-                        <h3 className="text-xl font-semibold mb-2 text-white">
-                          Visit Profile
-                        </h3>
-                        <p className="text-blue-200 mb-4">
-                          Click to view detailed interview experience and more
-                          insights
-                        </p>
-                      </div>
-                    </div>
                   </Card>
                 </motion.div>
               ))
-            : !loading &&
-              !error && (
+            : !loading && !error && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center col-span-2 text-gray-400"
+                  className="text-center col-span-full text-gray-400 text-lg"
                 >
                   No interview experiences found for{" "}
                   {selectedCollege?.name || "this company"}.

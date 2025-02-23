@@ -3,17 +3,14 @@ import { Link } from "react-router-dom";
 import Crosshair from "../Animation/CrossHair";
 
 const Landing = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
       ref={containerRef}
       className="h-screen w-full flex flex-col justify-center items-center overflow-hidden"
     >
-      <Crosshair
-        containerRef={containerRef.current ? containerRef : undefined}
-        color="#ffffff"
-      />
+      <Crosshair containerRef={containerRef} color="#ffffff" />
 
       <Link
         to="/home"

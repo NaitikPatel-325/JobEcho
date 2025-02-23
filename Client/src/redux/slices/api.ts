@@ -23,6 +23,17 @@ interface UserCollegeDetails {
   branch: string;
 }
 
+interface ICollegeType{
+  collegeName: string;
+  location: string;
+  briefDescription?: string;
+  websiteUrl?: string;
+  contactInformation: string;
+  companies: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface loginCredentialsType {
   email: string;
   password: string;
@@ -82,7 +93,13 @@ export const api = createApi({
         method: "PUT",
         body,
       }),
-    }),    
+    }),
+    getCollegeDatails: builder.query<ICollegeType,void>({
+      query: () => ({
+        url: "/user/getallCollages",
+        cache:"no-cache"
+      })
+    })    
   }),
 });
 
@@ -92,5 +109,6 @@ export const {
   useGetUserDetailsQuery,
   useSignupMutation,
   useGoogleSignInMutation,
-  useUpdateUserDetailsMutation
+  useUpdateUserDetailsMutation,
+  useGetCollegeDatailsQuery
 } = api;

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import VariableProximity from "@/Animation/VariableProximity/VariableProximity";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useLogoutMutation, useGoogleSignInMutation } from "@/redux/slices/api";

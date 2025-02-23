@@ -4,22 +4,31 @@ import { useLocation } from "react-router-dom";
 import AllRoutes from "./AllRoutes";
 import Header from "./components/Header";
 import { useDispatch } from "react-redux";
-import { useGetUserDetailsQuery } from "./redux/slices/api";
+import { useGetCollegeDatailsQuery, useGetUserDetailsQuery } from "./redux/slices/api";
 import { useEffect } from "react";
-import { updateCurrentUser, updateIsLoggedIn } from "./redux/slices/appSlice";
+import { setCollege, updateCurrentCollege, updateCurrentUser, updateIsLoggedIn } from "./redux/slices/appSlice";
 
 function AppContent() {
   const dispatch = useDispatch();
   const location = useLocation();
 
   const { data, isSuccess } = useGetUserDetailsQuery();
+  const { data: collegeData, isSuccess: isCollegeSuccess } = useGetCollegeDatailsQuery();
+
 
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(updateCurrentUser(data));
       dispatch(updateIsLoggedIn(true));
     }
+
+    if (isCollegeSuccess && collegeData) {
+      dispatch(updateCurrentCollege(collegeData));
+    }
+
   }, [data, isSuccess, dispatch]);
+
+
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>

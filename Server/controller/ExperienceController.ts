@@ -194,9 +194,9 @@ export const getAnalysis = async (req: Request, res: Response): Promise<void> =>
     console.log("Extracted experiences:", extractedExperiences);
 
 
-    const sentimentResponse = await axios.post("https://revana-4ni2.onrender.com/api/v1/youtube-comments",extractedExperiences );
-    
-    res.json(sentimentResponse);
+    // const sentimentResponse = await axios.post("https://revana-4ni2.onrender.com/api/v1/youtube-comments",extractedExperiences );
+
+    res.json(experienceList);
   } catch (error) {
     console.error("Error fetching experiences:", error);
     res.status(500).json({ message: "Internal server error" });
