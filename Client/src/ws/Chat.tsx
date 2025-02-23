@@ -11,27 +11,29 @@ const Chat: React.FC = () => {
   const isConnected = useRef(false);
 
   useEffect(() => {
-    if (isConnected.current) return; 
-
+    if (wsRef.current) return;  
     const connectWebSocket = () => {
       const socket = new WebSocket("ws://localhost:3000");
       wsRef.current = socket;
-      isConnected.current = true;
-
-      socket.onopen = () => console.log("✅ WebSocket connected");
-
+  
+      socket.onopen = () => {
+        console.log("WebSocket connected");
+        isConnected.current = true;
+      };
+  
       socket.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data);
-          setMessages((prev) => [
-            ...prev,
-            { user: message.userId, message: message.message, time: new Date().toLocaleTimeString() },
-          ]);
+          console.log("Received message:", message);
+          setMessages((prev:any) => {
+            if (prev.some((msg:any) => msg.message === message.message && msg.sender === message.sender)) return prev;
+            return [...prev, { sender: message.sender, receiver: message.receiver, message: message.message, time: new Date().toLocaleTimeString() }];
+          });
         } catch (error) {
-          console.error("❌ Error parsing WebSocket message", error);
+          console.error("Error parsing WebSocket message", error);
         }
       };
-
+  
       socket.onclose = () => {
         console.log("⚠️ WebSocket closed, reconnecting...");
         wsRef.current = null;
@@ -39,9 +41,9 @@ const Chat: React.FC = () => {
         setTimeout(connectWebSocket, 3000);
       };
     };
-
+  
     connectWebSocket();
-
+  
     return () => {
       if (wsRef.current) {
         wsRef.current.close();
@@ -49,8 +51,8 @@ const Chat: React.FC = () => {
         isConnected.current = false;
       }
     };
-  }, []);
-
+  }, [user?.email]);
+  
   const sendMessage = () => {
     if (wsRef.current && input.trim()) {
       const messageData = { userId: user ? user.email : "Anonymous", message: input };
