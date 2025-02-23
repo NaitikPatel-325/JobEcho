@@ -7,8 +7,8 @@ import mongoose from "mongoose";
 
 export const submitExperience = async (req: Request, res: Response) => {
   try {
-    const { experiences, offers, ...rest } = req.body;
-    console.log(offers);
+    const { experiences, results, ...rest } = req.body;
+    const offers = results;
 
     const companyCache: { [key: string]: any } = {};
 
@@ -34,14 +34,15 @@ export const submitExperience = async (req: Request, res: Response) => {
     );
 
     const updatedOffers = offers
-      ? await Promise.all(
-          offers.map(async (offer: any) => {
-            const name: string = offer.company;
-            const companyDoc = await getCompanyDoc(name);
-            return { ...offer, company: companyDoc._id };
-          })
-        )
-      : [];
+    ? await Promise.all(
+        offers.map(async (offer: any) => {
+          const name: string = offer.company;
+          const companyDoc = await getCompanyDoc(name);
+          return { ...offer, company: companyDoc._id, package: offer.lpa }; // mapping lpa to package if needed
+        })
+      )
+    : [];
+  
 
     const newExperienceSubmission = new Experience({
       ...rest,

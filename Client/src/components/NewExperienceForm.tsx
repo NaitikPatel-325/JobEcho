@@ -48,7 +48,7 @@ export default function NewExperienceForm() {
     }[]
   >([]);
   const [results, setResults] = useState<
-    { company: string; status: string; lpa?: string }[]
+    { company: string; status: string; package?: string }[]
   >([]);
 
   const addNewExperience = () => {
