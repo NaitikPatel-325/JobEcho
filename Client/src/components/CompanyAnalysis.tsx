@@ -22,7 +22,11 @@ export default function CompanyAnalysis() {
 
     try {
       const companyResponse = await fetch(
-        `http://localhost:3000/company/getbyname/${company}`
+        `http://localhost:3000/company/getbyname/${company}`,
+        {
+          method : "GET",
+          credentials: "include", 
+        }
       );
       const companyData = await companyResponse.json();
       console.log("Company Data:", companyData);
@@ -36,7 +40,10 @@ export default function CompanyAnalysis() {
       const companyId = companyData._id;
 
       const analysisResponse = await fetch(
-        `http://localhost:3000/user/getaipowerdanalysis/${companyId}`
+        `http://localhost:3000/user/getaipowerdanalysis/${companyId}`,{
+          method : "GET",
+          credentials: "include",
+        }
       );
       const analysisData = await analysisResponse.json();
 

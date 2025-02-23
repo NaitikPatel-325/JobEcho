@@ -150,6 +150,15 @@ export default function Header() {
                 Live Chat
               </a>
             </li>
+            <li>
+              <a href="/companyanalysis"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
+                Company Analysis
+              </a>
+
+
+            </li>
           </ul>
         </nav>
 
