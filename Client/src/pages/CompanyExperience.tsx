@@ -39,7 +39,7 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/user/getCollegesandcompany/${selectedCollege}`, {
+          `https://jobecho-iex4.onrender.com/user/getCollegesandcompany/${selectedCollege}`, {
             method: "GET", 
             credentials: "include" // Allows cookies to be sent with the request
         }

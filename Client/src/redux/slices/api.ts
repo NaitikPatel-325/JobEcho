@@ -36,7 +36,7 @@ export interface signupCredentialsType {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://jobecho-iex4.onrender.com",
     credentials: "include",
   }),
   tagTypes: ["myCodes", "allCodes"],

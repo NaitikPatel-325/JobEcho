@@ -66,7 +66,7 @@ export default function ExperienceForm() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/user/submit-experience",
+        "https://jobecho-iex4.onrender.com/user/submit-experience",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

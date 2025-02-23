@@ -42,7 +42,7 @@ export default function ViewExperience() {
     const fetchExperience = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/InterviewExperience/${id}`,
+          `https://jobecho-iex4.onrender.com/user/InterviewExperience/${id}`,
           {
             withCredentials: true, // This ensures cookies are sent with the request
           }
@@ -53,7 +53,7 @@ export default function ViewExperience() {
         const companyName = response.data.experiences[0]?.company;
         if (companyName) {
           const relatedResponse = await axios.get(
-            `http://localhost:3000/user/InterviewExperience?company=${companyName}`,
+            `https://jobecho-iex4.onrender.com/user/InterviewExperience?company=${companyName}`,
             {
               withCredentials: true, // Sends cookies with the request
             }

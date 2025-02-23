@@ -22,7 +22,7 @@ export default function CompanyAnalysis() {
 
     try {
       const companyResponse = await fetch(
-        `http://localhost:3000/company/getbyname/${company}`,
+        `https://jobecho-iex4.onrender.com/company/getbyname/${company}`,
         {
           method : "GET",
           credentials: "include", 
@@ -40,7 +40,7 @@ export default function CompanyAnalysis() {
       const companyId = companyData._id;
 
       const analysisResponse = await fetch(
-        `http://localhost:3000/user/getaipowerdanalysis/${companyId}`,{
+        `https://jobecho-iex4.onrender.com/user/getaipowerdanalysis/${companyId}`,{
           method : "GET",
           credentials: "include",
         }

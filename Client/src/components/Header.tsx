@@ -25,7 +25,7 @@ export default function Header() {
   const containerRef = useRef(null);
   // const [sheetOpen, setSheetOpen] = useState<boolean>(false);
   const windowWidth = useSelector(
-    (state: RootState) => state.appSlice.currentWidth
+    (state: RootState) => (state.appSlice as any).currentWidth
   );
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(

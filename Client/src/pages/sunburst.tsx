@@ -13,7 +13,7 @@ const SunburstChart = () => {
       try {
         // Fetch all colleges
         const response = await fetch(
-          "http://localhost:3000/user/getallCollages", {
+          "https://jobecho-iex4.onrender.com/user/getallCollages", {
             method: "GET", 
             credentials: "include" // Allows cookies to be sent with the request
         }
@@ -28,7 +28,7 @@ const SunburstChart = () => {
         // Fetch companies for each college
         const companyPromises = colleges.map(async (college: any) => {
           const companyResponse = await fetch(
-            `http://localhost:3000/user/getCollegesandcompany/${college._id}`, {
+            `https://jobecho-iex4.onrender.com/user/getCollegesandcompany/${college._id}`, {
               method: "GET", 
               credentials: "include" // Allows cookies to be sent with the request
           }

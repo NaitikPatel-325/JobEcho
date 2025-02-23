@@ -63,7 +63,7 @@ export default function NewExperienceForm() {
   useEffect(() => {
     const fetchCollegeNames = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/getallCollages", {
+        const response = await fetch("https://jobecho-iex4.onrender.com/user/getallCollages", {
           method: "GET", 
           credentials: "include" // Allows cookies to be sent with the request
       });
@@ -79,7 +79,7 @@ export default function NewExperienceForm() {
     // Fetch companies once
     const fetchAllCompanies = async () => {
       try {
-        const response = await fetch("http://localhost:3000/company", {
+        const response = await fetch("https://jobecho-iex4.onrender.com/company", {
           method: "GET", 
           credentials: "include" // Allows cookies to be sent with the request
       });
@@ -135,7 +135,7 @@ export default function NewExperienceForm() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/user/submit-experience", {
+      const response = await fetch("https://jobecho-iex4.onrender.com/user/submit-experience", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

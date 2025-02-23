@@ -43,7 +43,7 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
       try {
         //console.log("Fetching experiences for company_id:", company_id);
         const response = await axios.get(
-          `http://localhost:3000/experience/get-experience-by-company/${company_id}`,
+          `https://jobecho-iex4.onrender.com/experience/get-experience-by-company/${company_id}`,
           {
             withCredentials: true, // This sends cookies with the request
           }
