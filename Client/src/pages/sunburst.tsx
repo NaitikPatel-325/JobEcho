@@ -1,20 +1,40 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Plotly from "plotly.js-dist";
 
 const SunburstChart = () => {
   useEffect(() => {
     const sampleData = {
       labels: [
-        "root", "Engineering", "Computer Science", "Mechanical", "Civil",
-        "Management", "MBA", "MBATech", "MTech", "BBA",
-        "Science", "Physics", "Mathematics"
+        "root",
+        "Engineering",
+        "Computer Science",
+        "Mechanical",
+        "Civil",
+        "Management",
+        "MBA",
+        "MBATech",
+        "MTech",
+        "BBA",
+        "Science",
+        "Physics",
+        "Mathematics",
       ],
       parents: [
-        "", "root", "Engineering", "Engineering", "Engineering",
-        "root", "Management", "MBA", "MBA", "Management",
-        "root", "Science", "Science"
+        "",
+        "root",
+        "Engineering",
+        "Engineering",
+        "Engineering",
+        "root",
+        "Management",
+        "MBA",
+        "MBA",
+        "Management",
+        "root",
+        "Science",
+        "Science",
       ],
-      values: [0, 0, 30, 20, 15, 0, 0, 12, 21, 10, 0, 18, 22]
+      values: [0, 0, 30, 20, 15, 0, 0, 12, 21, 10, 0, 18, 22],
     };
 
     const chartData = [
@@ -34,7 +54,7 @@ const SunburstChart = () => {
       width: 500,
       height: 500,
       paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)"
+      plot_bgcolor: "rgba(0,0,0,0)",
     };
 
     Plotly.newPlot("myDiv", chartData, layout);

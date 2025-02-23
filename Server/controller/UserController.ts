@@ -19,6 +19,7 @@ export const googleSign: RequestHandler = async (req, res): Promise<void> => {
   console.log("Google Sign-In Request Received!");
 
   const { idToken } = req.body;
+  console.log("Token in google sign in"+idToken);
   if (!idToken) {
     res.status(400).json({ message: "Token ID is required" });
     return;
@@ -35,6 +36,7 @@ export const googleSign: RequestHandler = async (req, res): Promise<void> => {
       res.status(400).json({ message: "Invalid token" });
       return;
     }
+    console.log("payload is "+payload);
 
     const { sub, email, name, picture } = payload;
 

@@ -42,7 +42,10 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
       try {
         console.log("Fetching experiences for company_id:", company_id);
         const response = await axios.get(
-          `http://localhost:3000/experience/get-experience-by-company/${company_id}`
+          `http://localhost:3000/experience/get-experience-by-company/${company_id}`,
+          {
+            withCredentials: true, // This sends cookies with the request
+          }
         );
 
         if (Array.isArray(response.data)) {
@@ -130,18 +133,19 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
                         <h4 className="text-lg font-medium text-white">
                           Latest Experience:
                         </h4>
-                        {experience.experiences?.length > 0 &&  experience.experiences[0].name && (
-                          <div className="ml-4 mt-2 text-gray-300">
-                            <p>
-                              <span className="font-medium">Company:</span>{" "}
-                              {experience.experiences?.[0]?.company || "N/A"}
-                            </p>
-                            <p>
-                              <span className="font-medium">Year:</span>{" "}
-                              {experience.experiences?.[0]?.year || "N/A"}
-                            </p>
-                          </div>
-                        )}
+                        {experience.experiences?.length > 0 &&
+                          experience.experiences[0].name && (
+                            <div className="ml-4 mt-2 text-gray-300">
+                              <p>
+                                <span className="font-medium">Company:</span>{" "}
+                                {experience.experiences?.[0]?.company || "N/A"}
+                              </p>
+                              <p>
+                                <span className="font-medium">Year:</span>{" "}
+                                {experience.experiences?.[0]?.year || "N/A"}
+                              </p>
+                            </div>
+                          )}
                       </div>
 
                       {/* Latest Offer */}
@@ -152,16 +156,17 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
                         {experience.offers?.length > 0 && (
                           <div className="ml-4 mt-2 text-gray-300">
                             <p>
-                              <span className="font-medium">Company:</span> {experience.offers[0].company?.name || "N/A"}
+                              <span className="font-medium">Company:</span>{" "}
+                              {experience.offers[0].company?.name || "N/A"}
                             </p>
                             {experience.offers[0]?.package && (
                               <p>
-                                <span className="font-medium">Package:</span> {experience.offers[0].package} LPA
+                                <span className="font-medium">Package:</span>{" "}
+                                {experience.offers[0].package} LPA
                               </p>
                             )}
                           </div>
                         )}
-
                       </div>
                       <div>
                         <h4 className="text-lg font-medium text-white">

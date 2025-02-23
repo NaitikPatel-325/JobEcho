@@ -52,6 +52,7 @@ export default function Header() {
       dispatch(updateIsLoggedIn(false));
       dispatch(updateCurrentUser(null));
       Cookies.remove("token");
+      localStorage.removeItem("USER");
       setTimeout(() => dispatch(setCurrentWidth(window.innerWidth)), 0);
       navigate("/");
     } catch (error) {
@@ -64,12 +65,24 @@ export default function Header() {
       const { credential } = credentialResponse;
       const data = await loginWithGoogle({ idToken: credential }).unwrap();
       console.log("Google Login Response:", data);
+
       const { token, user } = data;
+
       Cookies.set("token", token, { expires: 7 });
+      console.log("Token is ", token);
+      localStorage.setItem("USER", JSON.stringify(user));
+
+      // user=localStorage.getItem("USER");
+
       dispatch(updateCurrentUser(user));
       dispatch(updateIsLoggedIn(true));
       dispatch(updateLoginMethod("google"));
-      if (!user.collegeName || !user.collegeLocation || !user.graduationYear || !user.branch)
+      if (
+        !user.collegeName ||
+        !user.collegeLocation ||
+        !user.graduationYear ||
+        !user.branch
+      )
         navigate("/userdetails", { replace: true });
       else navigate("/home", { replace: true });
     } catch (error) {
@@ -97,25 +110,37 @@ export default function Header() {
         <nav className="md:flex md:items-center md:w-auto w-full hidden md:block">
           <ul className="md:flex items-center justify-center text-base text-gray-600">
             <li>
-              <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/home">
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/home"
+              >
                 Home
               </a>
             </li>
           </ul>
           <ul className="md:flex items-center justify-center text-base text-gray-400">
-              <li>
-                <a href="/user-experience-form-1" className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300">
-                  Share Experience
-                </a>
-              </li>
             <li>
-              <a href="/CollegeCompanies" className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300">
+              <a
+                href="/user-experience-form-1"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
+                Share Experience
+              </a>
+            </li>
+            <li>
+              <a
+                href="/CollegeCompanies"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
                 Interview Experiences
               </a>
             </li>
             <li>
-              <a href="/Chat" className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300">
-                 Live Chat 
+              <a
+                href="/Chat"
+                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+              >
+                Live Chat
               </a>
             </li>
           </ul>
@@ -129,20 +154,31 @@ export default function Header() {
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center">
                       <Avatar>
-                        <AvatarImage src={currentUser?.picture || "/default-avatar.png"} alt="User Avatar" />
+                        <AvatarImage
+                          src={currentUser?.picture || "/default-avatar.png"}
+                          alt="User Avatar"
+                        />
                         <AvatarFallback>U</AvatarFallback>
                       </Avatar>
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-48 bg-black">
-                    <DropdownMenuItem className="text-white font-semibold">Hello, {currentUser?.name || "User"}!</DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500">
+                    <DropdownMenuItem className="text-white font-semibold">
+                      Hello, {currentUser?.name || "User"}!
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer text-red-500"
+                    >
                       Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={() => console.error("Google Login Failed")} />
+                <GoogleLogin
+                  onSuccess={handleGoogleLoginSuccess}
+                  onError={() => console.error("Google Login Failed")}
+                />
               )}
             </ul>
           ) : null}

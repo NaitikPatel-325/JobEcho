@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { addCompany, setCollege, setCompanies, updateCompanies } from "@/redux/slices/appSlice";
+import { addCompany, setCollege, setCompanies } from "@/redux/slices/appSlice";
 
 export interface CollegeCompany {
   id: string;
@@ -39,7 +39,14 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/user/getCollegesandcompany/${selectedCollege}`
+          `http://localhost:3000/user/getCollegesandcompany/${selectedCollege}`,
+          {
+            method: "GET",
+            credentials: "include", // Include cookies with the request
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
 
         if (!response.ok) {
@@ -47,10 +54,9 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
         }
 
         const data: CollegeCompany[] = await response.json();
-        console.log("Inside Company Exp : ",data);
+        console.log("Inside Company Exp : ", data);
 
-        
-        const companiesForCollege =  data.map(company => company.name);
+        const companiesForCollege = data.map((company) => company.name);
         setCompaniesForCollege(companiesForCollege);
 
         dispatch(setCollege(""));
@@ -70,14 +76,13 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
   const handleCardClick = (company: any) => {
     console.log(company._id);
     dispatch(setCollege(company._id));
-  
+
     CompaniesForCollege.forEach((companyName) => {
       dispatch(addCompany(companyName));
     });
-  
+
     navigate(`/CollegeCompanies?id=${company._id}`);
   };
-  
 
   return (
     <div className="w-full h-full overflow-y-auto custom-scrollbar">
