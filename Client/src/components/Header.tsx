@@ -94,42 +94,11 @@ export default function Header() {
               </a>
             </li>
 
-            <li>
-              <a
-                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
-                href="/user-experience-form-1"
-              >
-                Share Experience
-              </a>
-            </li>
+       
 
-            <li>
-              <a
-                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
-                href="/CollegeCompanies"
-              >
-                Interview Experiences
-              </a>
-            </li>
           </ul>
 
           <ul className="md:flex items-center justify-center text-base text-gray-400">
-            <li>
-              <a
-                href="/home"
-                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="/features"
-                className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
-              >
-                Features
-              </a>
-            </li>
             {isLoggedIn && (
               <li>
                 <a

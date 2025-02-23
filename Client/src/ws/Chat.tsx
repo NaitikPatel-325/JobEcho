@@ -63,16 +63,21 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="chat-container">
-      <div className="chat-window">
+    <div className="chat-container flex flex-col h-screen p-4 bg-gray-900 text-white">
+      <div className="chat-window flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg, index) => (
-          <div key={index} className={`chat-message ${msg.user === "You" ? "sent" : "received"}`}>
-            <strong>{msg.user}:</strong> {msg.message}
+          <div key={index} className={`flex ${msg.user === "You" ? "justify-end" : "justify-start"}`}>
+            <div className={`p-3 rounded-lg max-w-xs ${msg.user === "You" ? "bg-blue-500 text-white self-end" : "bg-gray-700 text-white self-start"}`}>
+              <strong>{msg.user}:</strong> {msg.message}
+            </div>
           </div>
         ))}
       </div>
-      <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={sendMessage}>Send</button>
+      <div className="flex items-center p-2 bg-gray-800 rounded-lg">
+        <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
+          className="flex-1 p-2 rounded-lg bg-gray-700 text-white outline-none" placeholder="Type a message..." />
+        <button onClick={sendMessage} className="ml-2 px-4 py-2 bg-blue-500 rounded-lg">Send</button>
+      </div>
     </div>
   );
 };
