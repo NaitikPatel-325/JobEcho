@@ -2,25 +2,30 @@
 import { Request, Response } from "express";
 import Company from "../models/Company";
 
-export const createCompany = async (req:Request) => {
+
+export const createCompany = async (req: Request) => {
   try {
-    const { name, locations, website, info } = req.body;
-    console.log(req.body);
+    const { name, college, locations, website, info } = req.body;
+    
     if (!name) {
-      console.log(name);
       throw new Error("Name is required");
     }
+
     const companyData = new Company({
       name,
-      locations,
-      website,
-      info
+      college,    
+      locations,  
+      website,    
+      info        
     });
+
     await companyData.save();
+    console.log("Company saved successfully");
   } catch (error) {
     console.error("Error saving company:", error);
   }
 };
+
 
 export const getCompanyDetails = async (req: Request, res: Response) => {
   console.log("Called!!");
