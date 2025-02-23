@@ -39,12 +39,12 @@ export default function CollegeCompanies() {
         
         if (!response.ok) throw new Error("Failed to fetch colleges");
         const data = await response.json();
-  
+
         const formattedColleges = data.map((college: any) => ({
           id: college._id,
-          name: college.collegeName, 
+          name: college.collegeName,
           location: college.location,
-          rating: college.rating || 0, 
+          rating: college.rating || 0,
         }));
   
         setColleges(formattedColleges);
@@ -55,7 +55,7 @@ export default function CollegeCompanies() {
         setLoading(false);
       }
     };
-  
+
     fetchColleges();
   }, []);
   
@@ -63,10 +63,11 @@ export default function CollegeCompanies() {
   const filteredColleges = colleges.filter((college) =>
     college?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
 
-  if (loading) return <div className="text-white text-center p-10">Loading...</div>;
-  if (error) return <div className="text-red-500 text-center p-10">{error}</div>;
+  if (loading)
+    return <div className="text-white text-center p-10">Loading...</div>;
+  if (error)
+    return <div className="text-red-500 text-center p-10">{error}</div>;
 
   return (
     <>

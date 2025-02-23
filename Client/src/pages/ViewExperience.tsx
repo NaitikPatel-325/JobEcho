@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -42,15 +42,21 @@ export default function ViewExperience() {
     const fetchExperience = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/InterviewExperience/${id}`
+          `http://localhost:3000/user/InterviewExperience/${id}`,
+          {
+            withCredentials: true, // This ensures cookies are sent with the request
+          }
         );
-        setExperience(response.data);
 
+        console.log(response.data);
         // Fetch other experiences from the same company
         const companyName = response.data.experiences[0]?.company;
         if (companyName) {
           const relatedResponse = await axios.get(
-            `http://localhost:3000/user/InterviewExperience?company=${companyName}`
+            `http://localhost:3000/user/InterviewExperience?company=${companyName}`,
+            {
+              withCredentials: true, // Sends cookies with the request
+            }
           );
           setRelatedExperiences(
             relatedResponse.data.filter(

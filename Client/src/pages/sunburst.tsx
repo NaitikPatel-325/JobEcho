@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 import Plotly from "plotly.js-dist";
 
 const SunburstChart = () => {
-  const [chartData, setChartData] = useState<{ labels: string[], parents: string[], values: number[] } | null>(null);
+  const [chartData, setChartData] = useState<{
+    labels: string[];
+    parents: string[];
+    values: number[];
+  } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch all colleges
-        const response = await fetch("http://localhost:3000/user/getallCollages");
+        const response = await fetch(
+          "http://localhost:3000/user/getallCollages"
+        );
         if (!response.ok) throw new Error("Failed to fetch colleges");
         const colleges = await response.json();
 
@@ -54,27 +60,29 @@ const SunburstChart = () => {
 
     const { labels, parents, values } = chartData;
 
-    Plotly.newPlot("myDiv", [
+    Plotly.newPlot(
+      "myDiv",
+      [
+        {
+          type: "sunburst",
+          labels,
+          parents,
+          values,
+          textfont: { size: 20, color: "#377eb8" },
+          marker: { line: { width: 2 } },
+        },
+      ],
       {
-        type: "sunburst",
-        labels,
-        parents,
-        values,
-        outsidetextfont: { size: 20, color: "#377eb8" },
-        leaf: { opacity: 0.4 },
-        marker: { line: { width: 2 } },
-      },
-    ], {
-      margin: { l: 0, r: 0, b: 0, t: 0 },
-      width: 600,
-      height: 600,
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)",
-    });
+        margin: { l: 0, r: 0, b: 0, t: 0 },
+        width: 600,
+        height: 600,
+        paper_bgcolor: "rgba(0,0,0,0)",
+        plot_bgcolor: "rgba(0,0,0,0)",
+      }
+    );
   }, [chartData]);
 
   return <div id="myDiv"></div>;
 };
 
 export default SunburstChart;
-
