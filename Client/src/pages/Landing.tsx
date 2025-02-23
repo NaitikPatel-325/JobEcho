@@ -23,12 +23,12 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, index }) 
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: index * 0.2 }}
         viewport={{ once: true }}
-        className="bg-white shadow-xl rounded-xl p-6 w-96 md:w-96 text-left relative z-10 flex flex-col items-center md:items-start"
+        className="bg-gray-800 shadow-lg rounded-xl p-6 w-96 md:w-96 text-left relative z-10 flex flex-col items-center md:items-start border border-gray-700"
       >
-        <h4 className="text-2xl font-semibold text-gray-900">{title}</h4>
-        <p className="text-gray-600 mt-2 text-sm md:text-base text-center md:text-left">{description}</p>
+        <h4 className="text-2xl font-semibold text-white">{title}</h4>
+        <p className="text-gray-400 mt-2 text-sm md:text-base text-center md:text-left">{description}</p>
       </motion.div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-600 rounded-full z-0" />
+      <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full z-0" />
     </div>
   );
 };
@@ -36,23 +36,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, index }) 
 const LandingPage = () => {
   const navigate = useNavigate();
   return (
-    <div className="w-full min-h-screen flex flex-col overflow-hidden overflow-x-hidden">
-      <nav className="w-full flex justify-between items-center py-4 px-12 bg-white shadow-md fixed top-0 left-0 z-50">
-        <h1 className="text-2xl font-bold text-purple-600">JobEcho</h1>
-        <div className="hidden md:flex space-x-6">
-          <a href="#" className="text-gray-600 hover:text-purple-600">Home</a>
-          <a href="#" className="text-gray-600 hover:text-purple-600">Student Form</a>
-          <a href="#" className="text-gray-600 hover:text-purple-600">Company Insights</a>
-          <a href="#" className="text-gray-600 hover:text-purple-600">Interview Experiences</a>
-          <a href="#" className="text-gray-600 hover:text-purple-600">About</a>
-        </div>
-      </nav>
+    <div className="w-full min-h-screen flex flex-col overflow-hidden overflow-x-hidden bg-black text-white">
 
-      <div className="flex-1 flex flex-col justify-center items-center text-center bg-white px-4 w-full pt-56 pb-24">
-        <h2 className="text-5xl font-bold leading-tight text-gray-900 max-w-full">
-          Simplify Your <span className="text-purple-600">Placement Journey</span>
+      <div className="flex-1 flex flex-col justify-center items-center text-center px-4 w-full pt-56 pb-24">
+        <h2 className="text-5xl font-bold leading-tight text-white max-w-full">
+          Simplify Your <span className="text-purple-500">Placement Journey</span>
         </h2>
-        <p className="text-lg text-gray-500 mt-4 max-w-3xl">
+        <p className="text-lg text-gray-400 mt-4 max-w-3xl">
           Track your applications, analyze hiring trends, and get real-time placement insights—all in one place.
         </p>
         <div className="mt-6 flex justify-center w-full max-w-lg">
@@ -60,12 +50,12 @@ const LandingPage = () => {
             Get Started →
           </button>
         </div>
-        <p className="text-gray-400 text-sm mt-3">Free to Use</p>
+        <p className="text-gray-500 text-sm mt-3">Free to Use</p>
       </div>
 
-      <h2 className="text-4xl font-bold text-gray-900 mt-12 text-center">Features</h2>
+      <h2 className="text-4xl font-bold text-white mt-12 text-center">Features</h2>
       <div className="relative w-full flex flex-col items-center py-16 gap-12">
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-300" />
+        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-700" />
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} index={index} />
         ))}

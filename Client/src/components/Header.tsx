@@ -62,22 +62,24 @@ export default function Header() {
       <div className="lg:px-16 px-4 flex flex-wrap items-center py-4 justify-between">
         {/* Logo */}
         <div ref={containerRef} className="flex items-center relative">
-          <VariableProximity
-            label="JobEcho"
-            className="text-4xl text-white font-extrabold"
-            fromFontVariationSettings="'wght' 400, 'opsz' 9"
-            toFontVariationSettings="'wght' 1000, 'opsz' 40"
-            containerRef={containerRef}
-            radius={300}
-            falloff="linear"
-          />
+          <Link to="/" className="no-underline">
+            <VariableProximity
+              label="JobEcho"
+              className="text-4xl text-white font-extrabold cursor-pointer"
+              fromFontVariationSettings="'wght' 400, 'opsz' 9"
+              toFontVariationSettings="'wght' 1000, 'opsz' 40"
+              containerRef={containerRef}
+              radius={300}
+              falloff="linear"
+            />
+          </Link>
         </div>
 
         {/* Navigation Links */}
         <nav className="md:flex md:items-center md:w-auto w-full hidden md:block">
         <ul className="md:flex items-center justify-center text-base text-gray-600">
   <li>
-    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/">
+    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/home">
       Home
     </a>
   </li>

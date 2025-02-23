@@ -34,7 +34,7 @@ export default function AllRoutes() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/userdetails" element={<UserDetails />} />
         <Route path="/user-experience-form" element={<ExperienceForm />} />
-        <Route path="/InterviewExperience" element={<InterviewExperiences />} />
+        <Route path="/InterviewExperience" element={<InterviewExperiences company_id={undefined} />} />
         <Route path="/user-experience-form-1" element={<NewExperienceForm />} />
         <Route path="/CollegeCompanies" element={<CollegeCompanies />} />
 

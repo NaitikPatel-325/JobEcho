@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useGetUserDetailsQuery } from "./redux/slices/api";
 import { useEffect } from "react";
 import { updateCurrentUser, updateIsLoggedIn } from "./redux/slices/appSlice";
+import LandingPage from "./pages/Landing";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function AppContent() {
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
       {location.pathname !== "/" && location.pathname !== "/user-experience-form-1" && <Header />}
+      <Header />
       <AllRoutes />
     </GoogleOAuthProvider>
   );
