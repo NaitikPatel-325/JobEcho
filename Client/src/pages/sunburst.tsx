@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
-const Plotly = require("plotly.js-dist");
-
-
+import Plotly from "plotly.js-dist";
 
 const SunburstChart = () => {
   const chartRef = useRef<HTMLDivElement | null>(null);
