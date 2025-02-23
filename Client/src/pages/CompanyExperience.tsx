@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { addCompany, setCollege, setCompanies, updateCompanies } from "@/redux/slices/appSlice";
 
 export interface CollegeCompany {
   id: string;
@@ -18,8 +20,11 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [CompaniesForCollege, setCompaniesForCollege] = useState<string[]>([]);
 
   console.log(selectedCollege);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -41,7 +46,15 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
         }
 
         const data: CollegeCompany[] = await response.json();
-        console.log(data);
+        console.log("Inside Company Exp : ",data);
+
+        
+        const companiesForCollege =  data.map(company => company.name);
+        setCompaniesForCollege(companiesForCollege);
+
+        dispatch(setCollege(""));
+        dispatch(setCompanies([]));
+
         setFilteredColleges(data);
       } catch (err) {
         setError("Error fetching data. Please try again.");
@@ -51,12 +64,19 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
     };
 
     fetchCompanies();
-  }, [selectedCollege]);
+  }, [dispatch, selectedCollege]);
 
-  const handleCardClick = (company) => {
+  const handleCardClick = (company: any) => {
     console.log(company._id);
+    dispatch(setCollege(company._id));
+  
+    CompaniesForCollege.forEach((companyName) => {
+      dispatch(addCompany(companyName));
+    });
+  
     navigate(`/CollegeCompanies?id=${company._id}`);
   };
+  
 
   return (
     <div className="w-full h-full overflow-y-auto custom-scrollbar">
