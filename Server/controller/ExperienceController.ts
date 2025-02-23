@@ -95,7 +95,7 @@ export const getExperienceByCompany = async (req: Request, res: Response): Promi
       }
     })
     .populate("experiences.company", "name website") // Populate company details
-    .populate("offers.company", "name") // Populate offer details
+    .populate("offers.company", "name") 
     .exec();
 
     console.log("Experiences for Company:", experiences);

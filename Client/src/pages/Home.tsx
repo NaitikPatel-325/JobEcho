@@ -4,25 +4,25 @@ import { useNavigate } from "react-router-dom";
 
 const features = [
   {
-    title: "Student Form",
+    title: "📋 Student Form",
     description:
       "Easily submit your placement details and track progress. Get notified on application updates and maintain a digital record of your journey.",
     image: "/path-to-image1.png",
   },
   {
-    title: "Company Insights",
+    title: "💼 Company Insights",
     description:
       "Analyze hiring trends, salaries, and interview processes to make informed career decisions. Gain deep insights into company cultures and work environments.",
     image: "/path-to-image2.png",
   },
   {
-    title: "Chatbot Support",
+    title: "🤖 Chatbot Support",
     description:
       "Instant answers to placement queries with AI-powered assistance, available 24/7. Get guidance on resumes, interview tips, and career growth.",
     image: "/path-to-image3.png",
   },
   {
-    title: "Ratings & Reviews",
+    title: "⭐ Ratings & Reviews",
     description:
       "Rate and review companies based on placement experiences, helping future job seekers. Share detailed feedback on interview processes and work-life balance.",
     image: "/path-to-image4.png",
@@ -53,12 +53,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         viewport={{ once: true }}
         className="bg-gray-800 shadow-lg rounded-xl p-6 w-96 md:w-96 text-left relative z-10 flex flex-col items-center md:items-start border border-gray-700"
       >
-        <h4 className="text-2xl font-semibold text-white">{title}</h4>
-        <p className="text-gray-400 mt-2 text-sm md:text-base text-center md:text-left">
+        <h4 className="text-2xl font-semibold bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text drop-shadow-lg flex items-center">
+          {title}
+        </h4>
+        <p className="text-gray-400 mt-3 text-sm md:text-base text-center md:text-left tracking-wide leading-relaxed drop-shadow-md">
           {description}
         </p>
       </motion.div>
-      <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full z-0" />
+      <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full z-0 shadow-lg" />
     </div>
   );
 };
@@ -84,11 +86,11 @@ const Home = () => {
             Get Started →
           </button>
         </div>
-        <p className="text-gray-500 text-sm mt-3">Free to Use</p>
+        {/* <p className="text-gray-500 text-sm mt-3">Free to Use</p> */}
       </div>
 
       <h2 className="text-4xl font-bold text-white mt-12 text-center">
-        Features
+        Features ✨
       </h2>
       <div className="relative w-full flex flex-col items-center py-16 gap-12">
         <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-700" />

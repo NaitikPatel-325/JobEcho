@@ -25,7 +25,7 @@ function AppContent() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
       {location.pathname !== "/" &&
         location.pathname !== "/user-experience-form-1" && <Header />}
-      <Header />
+
       <AllRoutes />
     </GoogleOAuthProvider>
   );
