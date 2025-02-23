@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import VariableProximity from "@/Animation/VariableProximity/VariableProximity";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useLogoutMutation, useGoogleSignInMutation } from "@/redux/slices/api";
@@ -22,7 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Header() {
   const containerRef = useRef(null);
-  const [sheetOpen, setSheetOpen] = useState<boolean>(false);
+  // const [sheetOpen, setSheetOpen] = useState<boolean>(false);
   const windowWidth = useSelector(
     (state: RootState) => state.appSlice.currentWidth
   );
@@ -63,6 +64,8 @@ export default function Header() {
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {
       const { credential } = credentialResponse;
+      const dispatch = useDispatch();
+
       const data = await loginWithGoogle({ idToken: credential }).unwrap();
       console.log("Google Login Response:", data);
 
@@ -75,8 +78,11 @@ export default function Header() {
       // user=localStorage.getItem("USER");
 
       dispatch(updateCurrentUser(user));
+
       dispatch(updateIsLoggedIn(true));
       dispatch(updateLoginMethod("google"));
+
+      // const user=reduce()
       if (
         !user.collegeName ||
         !user.collegeLocation ||

@@ -6,6 +6,7 @@ import Company from "../models/Company";
 import mongoose from "mongoose";
 import { promises } from "dns";
 import axios from "axios";
+import { generatePromptResponse } from "../prompt";
 
 export const submitExperience = async (req: Request, res: Response) => {
   try {
@@ -165,18 +166,17 @@ export const fetchAvgPackageDetails = async (req: Request, res: Response): Promi
   }
 };
 
-
 export const getAnalysis = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
     const submissions = await Experience.find({ "experiences.company": id });
-
     if (!submissions.length) {
       res.status(404).json({ message: "No experiences found for this company" });
       return;
     }
 
+    // Extract experiences for each submission
     const experienceList = submissions.flatMap((submission) =>
       submission.experiences
         .filter((exp) => exp.company.toString() === id)
@@ -189,17 +189,27 @@ export const getAnalysis = async (req: Request, res: Response): Promise<void> =>
         )
     );
 
-    console.log("Experience list:", experienceList);
-    const extractedExperiences = experienceList.map(exp => exp.experience);
-    console.log("Extracted experiences:", extractedExperiences);
+    // const sentimentResponse = await axios.post("https://revana-4ni2.onrender.com/api/v1/youtube-comments",extractedExperiences );
 
+    const summary = experienceList
+      .map(exp => `Round ${exp.roundName}: ${exp.experience}`)
+      .join("; ");
 
-    const sentimentResponse = await axios.post("https://revana-4ni2.onrender.com/api/v1/youtube-comments",extractedExperiences );
+    const prompt = `The company has recorded the following interview experiences: ${summary}. 
+Please provide a concise 2-3 line analysis of the company's overall interview process. 
+Each point should highlight a strength or weakness observed in the rounds and include actionable recommendations for future candidates.`;
+
+    const analysis = await generatePromptResponse(prompt);
     
-    res.json(sentimentResponse);
+    res.status(200).json({
+      message: "Analysis generated successfully",
+      analysis
+    });
+
   } catch (error) {
-    console.error("Error fetching experiences:", error);
+    console.error("Error fetching experiences or generating prompt:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
