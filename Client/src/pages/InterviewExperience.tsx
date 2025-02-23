@@ -41,14 +41,14 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
-        console.log("Fetching experiences for company_id:", company_id);
+        //console.log("Fetching experiences for company_id:", company_id);
         const response = await axios.get(
           `http://localhost:3000/experience/get-experience-by-company/${company_id}`
         );
 
         if (Array.isArray(response.data)) {
           setExperiences(response.data);
-          console.log("Received experiences:", response.data);
+          //console.log("Received experiences:", response.data);
         } else {
           setError("Invalid data format received from the server.");
         }
