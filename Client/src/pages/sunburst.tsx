@@ -60,8 +60,7 @@ const SunburstChart = () => {
         labels,
         parents,
         values,
-        outsidetextfont: { size: 20, color: "#377eb8" },
-        leaf: { opacity: 0.4 },
+        textfont: { size: 20, color: "#377eb8" },
         marker: { line: { width: 2 } },
       },
     ], {
