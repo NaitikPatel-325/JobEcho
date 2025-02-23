@@ -11,7 +11,6 @@ import {
 } from "./ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ChevronLeft, Plus, X } from "lucide-react";
-import './componentStyles/NewExperienceForm.css'
 
 const formSteps = ["Personal", "Experience", "Results"] as const;
 
