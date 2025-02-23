@@ -83,20 +83,15 @@ export default function Header() {
       Home
     </a>
   </li>
+  
   <li>
-    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/features">
-      Features
+    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/user-experience-form-1">
+      Share Experience
     </a>
   </li>
-  {isLoggedIn ? (
-    <li>
-      <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/user-experience-form-1">
-        Share Experience
-      </a>
-    </li>
-  ) : null}
+
   <li>
-    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/InterviewExperience-1">
+    <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/CollegeCompanies">
       Interview Experiences
     </a>
   </li>
@@ -139,11 +134,6 @@ export default function Header() {
                   <li>
                     <a href="/" className="p-2 block">
                       Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/features" className="p-2 block">
-                      Features
                     </a>
                   </li>
                   <li>
