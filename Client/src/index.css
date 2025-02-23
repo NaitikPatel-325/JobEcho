@@ -35,6 +35,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
+  background: rgba(0, 0, 0, 0.8); /* Slight transparency */
   min-height: 100vh;
   color: white;
 }
