@@ -4,6 +4,8 @@ import Experience from "../models/Experience";
 import { createCompany } from "./CompanyController";
 import Company from "../models/Company";
 import mongoose from "mongoose";
+import { promises } from "dns";
+import axios from "axios";
 
 export const submitExperience = async (req: Request, res: Response) => {
   try {
@@ -162,3 +164,42 @@ export const fetchAvgPackageDetails = async (req: Request, res: Response): Promi
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
+export const getAnalysis = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const submissions = await Experience.find({ "experiences.company": id });
+
+    if (!submissions.length) {
+      res.status(404).json({ message: "No experiences found for this company" });
+      return;
+    }
+
+    const experienceList = submissions.flatMap((submission) =>
+      submission.experiences
+        .filter((exp) => exp.company.toString() === id)
+        .flatMap((exp) =>
+          exp.rounds.map((round) => ({
+            experienceId: submission._id,
+            roundName: round.name,
+            experience: round.experience,
+          }))
+        )
+    );
+
+    console.log("Experience list:", experienceList);
+    const extractedExperiences = experienceList.map(exp => exp.experience);
+    console.log("Extracted experiences:", extractedExperiences);
+
+
+    const sentimentResponse = await axios.post("https://revana-4ni2.onrender.com/api/v1/youtube-comments",extractedExperiences );
+    
+    res.json(sentimentResponse);
+  } catch (error) {
+    console.error("Error fetching experiences:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
