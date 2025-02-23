@@ -7,8 +7,8 @@ import mongoose from "mongoose";
 
 export const submitExperience = async (req: Request, res: Response) => {
   try {
-    const { experiences, offers, ...rest } = req.body;
-    console.log(offers);
+    const { experiences, results, ...rest } = req.body;
+    const offers = results;
 
     const companyCache: { [key: string]: any } = {};
 
@@ -34,14 +34,15 @@ export const submitExperience = async (req: Request, res: Response) => {
     );
 
     const updatedOffers = offers
-      ? await Promise.all(
-          offers.map(async (offer: any) => {
-            const name: string = offer.company;
-            const companyDoc = await getCompanyDoc(name);
-            return { ...offer, company: companyDoc._id };
-          })
-        )
-      : [];
+    ? await Promise.all(
+        offers.map(async (offer: any) => {
+          const name: string = offer.company;
+          const companyDoc = await getCompanyDoc(name);
+          return { ...offer, company: companyDoc._id, package: offer.lpa }; // mapping lpa to package if needed
+        })
+      )
+    : [];
+  
 
     const newExperienceSubmission = new Experience({
       ...rest,
@@ -102,6 +103,59 @@ export const getExperienceByCompany = async (req: Request, res: Response): Promi
     res.status(200).json(experiences);
   } catch (error) {
     console.error("Error fetching experiences:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const fetchAvgPackageDetails = async (req: Request, res: Response): Promise<void> => {
+  console.log("Called fetchAvgPackageDetails!!");
+
+  try {
+    const companyId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      res.status(400).json({ message: "Invalid company ID" });
+      return;
+    }
+
+    const experiences = await Experience.find({
+      offers: { 
+        $elemMatch: { company: new mongoose.Types.ObjectId(companyId) } 
+      }
+    })
+      .populate("experiences.company", "name website")
+      .populate("offers.company", "name")
+      .exec();
+
+    let totalPackage = 0;
+    let count = 0;
+
+    experiences.forEach(expDoc => {
+      // For each submission, filter the offers that belong to the given company.
+      const matchingOffers = expDoc.offers.filter((offer: any) =>
+        offer.company && offer.company._id.toString() === companyId
+      );
+
+      matchingOffers.forEach((offer: any) => {
+        // If offer is "Selected" and package exists, convert it to a number.
+        const packageValue = offer.status === "Selected" && offer.package
+          ? Number(offer.package)
+          : 0;
+        totalPackage += packageValue;
+        count++;
+      });
+    });
+
+    const avgPackage = count > 0 ? totalPackage / count : 0;
+
+    res.status(200).json({
+      message: "Fetched company experience details successfully",
+      data: {
+        avgPackage
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching company experience details:", error);
     res.status(500).json({ message: "Server error", error });
   }
 };

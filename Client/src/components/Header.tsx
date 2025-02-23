@@ -84,6 +84,35 @@ export default function Header() {
 
         {/* Navigation Links */}
         <nav className="md:flex md:items-center md:w-auto w-full hidden md:block">
+          <ul className="md:flex items-center justify-center text-base text-gray-600">
+            <li>
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/home"
+              >
+                Home
+              </a>
+            </li>
+
+            <li>
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/user-experience-form-1"
+              >
+                Share Experience
+              </a>
+            </li>
+
+            <li>
+              <a
+                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                href="/CollegeCompanies"
+              >
+                Interview Experiences
+              </a>
+            </li>
+          </ul>
+
           <ul className="md:flex items-center justify-center text-base text-gray-400">
             <li>
               <a
@@ -178,11 +207,6 @@ export default function Header() {
                   <li>
                     <a href="/" className="p-2 block">
                       Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/features" className="p-2 block">
-                      Features
                     </a>
                   </li>
                   {isLoggedIn && (

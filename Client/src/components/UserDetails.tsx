@@ -23,7 +23,6 @@ import {
   useGetUserDetailsQuery,
   useUpdateUserDetailsMutation,
 } from "@/redux/slices/api";
-import Home from "@/pages/Home";
 
 export default function UserDetails() {
   const [collegeName, setCollegeName] = useState("");
