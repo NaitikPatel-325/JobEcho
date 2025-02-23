@@ -1,5 +1,5 @@
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import {
@@ -39,6 +39,9 @@ export default function NewExperienceForm() {
   const [lastName, setLastName] = useState("");
   const [collegeName, setCollegeName] = useState("");
   const [graduationYear, setGraduationYear] = useState("");
+  const [colleges, setColleges] = useState<string[]>([]);
+  const [companies, setCompanies] = useState<string[]>([]);
+
   const [experiences, setExperiences] = useState<
     {
       company: string;
@@ -46,11 +49,46 @@ export default function NewExperienceForm() {
       rounds: { name: string; experience: string }[];
     }[]
   >([]);
+
   const [results, setResults] = useState<
     {
-      lpa?: string; company: string; status: string; package?: string 
-}[]
+      lpa?: string;
+      company: string;
+      status: string;
+      package?: string;
+    }[]
   >([]);
+
+  // Fetch colleges once
+  useEffect(() => {
+    const fetchCollegeNames = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/user/getallCollages");
+        const data = await response.json();
+        // Assuming each item has college.collegeName
+        const collegeNames = data.map((college: any) => college.collegeName);
+        setColleges(collegeNames);
+      } catch (error) {
+        console.error("Error fetching colleges:", error);
+      }
+    };
+
+    // Fetch companies once
+    const fetchAllCompanies = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/company");
+        const data = await response.json();
+        // Assuming each item has company.name
+        const companyNames = data.map((company: any) => company.name);
+        setCompanies(companyNames);
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+      }
+    };
+
+    fetchCollegeNames();
+    fetchAllCompanies();
+  }, []);
 
   const addNewExperience = () => {
     setExperiences([...experiences, { company: "", year: "", rounds: [] }]);
@@ -91,14 +129,11 @@ export default function NewExperienceForm() {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:3000/user/submit-experience",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("http://localhost:3000/user/submit-experience", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
       const result = await response.json();
       if (response.ok) {
@@ -125,25 +160,23 @@ export default function NewExperienceForm() {
         className="max-w-3xl mx-auto"
       >
         {/* Progress Steps */}
-        
         <div className="mb-8 w-full">
-        <motion.div
-          className="absolute -inset-2 rounded-xl"
-          style={{
-            background:
-              "linear-gradient(45deg, #3b82f6, #60a5fa, #3b82f6, #60a5fa)",
-
-            backgroundSize: "300% 300%",
-          }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
+          <motion.div
+            className="absolute -inset-2 rounded-xl"
+            style={{
+              background:
+                "linear-gradient(45deg, #3b82f6, #60a5fa, #3b82f6, #60a5fa)",
+              backgroundSize: "300% 300%",
+            }}
+            animate={{
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
           <div className="flex justify-between relative mb-4">
             <div className="absolute top-1/2 h-0.5 w-full bg-gray-700 -translate-y-1/2">
               <motion.div
@@ -209,7 +242,6 @@ export default function NewExperienceForm() {
           layout
           className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-6 border border-gray-700"
         >
-            
           <AnimatePresence mode="wait">
             {step === 0 && (
               <motion.div
@@ -257,14 +289,22 @@ export default function NewExperienceForm() {
                     <Label className="text-sm font-medium text-gray-300">
                       College Name
                     </Label>
-                    <Input
-                      type="text"
-                      placeholder="College Name"
+                    <select
                       value={collegeName}
                       onChange={(e) => setCollegeName(e.target.value)}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500"
-                    />
+                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 rounded p-2 w-full"
+                    >
+                      <option value="" disabled className="text-gray-400">
+                        Select a College
+                      </option>
+                      {colleges.map((college, index) => (
+                        <option key={index} value={college} className="text-white">
+                          {college}
+                        </option>
+                      ))}
+                    </select>
                   </motion.div>
+
                   <motion.div variants={itemVariants} className="space-y-2">
                     <Label className="text-sm font-medium text-gray-300">
                       Graduation Year
@@ -322,16 +362,27 @@ export default function NewExperienceForm() {
                         <X size={16} />
                       </motion.button>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <Input
-                          placeholder="Company Name"
-                          value={exp.company}
-                          onChange={(e) => {
-                            const newExperiences = [...experiences];
-                            newExperiences[i].company = e.target.value;
-                            setExperiences(newExperiences);
-                          }}
-                          className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500"
-                        />
+                        {/* Replace the input for company name with a dropdown */}
+                        <div className="space-y-2">
+                          <select
+                            value={exp.company}
+                            onChange={(e) => {
+                              const newExperiences = [...experiences];
+                              newExperiences[i].company = e.target.value;
+                              setExperiences(newExperiences);
+                            }}
+                            className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 rounded p-2 w-full"
+                          >
+                            <option value="" disabled className="text-gray-400">
+                              Select a Company
+                            </option>
+                            {companies.map((company, idx) => (
+                              <option key={idx} value={company} className="text-white">
+                                {company}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                         <Input
                           placeholder="Year"
                           value={exp.year}
@@ -398,7 +449,10 @@ export default function NewExperienceForm() {
                           className="mt-4 w-full bg-gray-700/50 border-gray-600 text-gray-200 hover:bg-gray-600 transition-colors group"
                           disabled={exp.rounds.length >= 4}
                         >
-                          <Plus size={16} className="mr-2 group-hover:rotate-180 transition-transform duration-300" />
+                          <Plus
+                            size={16}
+                            className="mr-2 group-hover:rotate-180 transition-transform duration-300"
+                          />
                           Add Round
                         </Button>
                       </motion.div>
@@ -453,16 +507,25 @@ export default function NewExperienceForm() {
                           <Label className="text-sm font-medium text-gray-300">
                             Company
                           </Label>
-                          <Input
-                            placeholder="Company Name"
+                          {/* Replacing input with dropdown */}
+                          <select
                             value={result.company}
                             onChange={(e) => {
                               const newResults = [...results];
                               newResults[i].company = e.target.value;
                               setResults(newResults);
                             }}
-                            className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500"
-                          />
+                            className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 rounded p-2 w-full"
+                          >
+                            <option value="" disabled className="text-gray-400">
+                              Select a Company
+                            </option>
+                            {companies.map((company, idx) => (
+                              <option key={idx} value={company} className="text-white">
+                                {company}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                         <div className="space-y-2">
                           <Label className="text-sm font-medium text-gray-300">
@@ -545,7 +608,6 @@ export default function NewExperienceForm() {
                 <Button
                   onClick={nextStep}
                   className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition-colors"
-                  // disabled={firstName === "" || lastName === "" || collegeName === "" || graduationYear === "" }
                 >
                   Next
                   <ChevronRight size={16} />

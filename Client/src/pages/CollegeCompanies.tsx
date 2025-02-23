@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Search, GraduationCap, Star, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, GraduationCap, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ResizableHandle,
@@ -27,7 +27,7 @@ export default function CollegeCompanies() {
   const [colleges, setColleges] = useState<College[]>([]);
   const [selectedCollege, setSelectedCollege] = useState<College | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

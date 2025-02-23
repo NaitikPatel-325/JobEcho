@@ -1,6 +1,6 @@
 import express from "express";
 import { getUserDetails, googleSign, logout, updateUserDetails } from "../controller/UserController";
-import { getExperiences, submitExperience } from "../controller/ExperienceController";
+import { getExperiences, submitExperience,getAnalysis } from "../controller/ExperienceController";
 import { getColleges,getCompaniesByCollege } from "../controller/CollageController";
 // import { addComment, getComments } from "../controller/CommentController";
 // import { getExperienceById, getExperiences, getExperiencesByCompany, submitExperience } from "../controller/ExperienceController";
@@ -23,7 +23,7 @@ UserAuthRouter.get("/InterviewExperience/:id", getExperiences);
 
 // UserAuthRouter.get("/InterviewExperience/:id/comments", getComments);
 // UserAuthRouter.post("InterviewExperience/:id/comments",addComment);
-
+UserAuthRouter.get("/getaipowerdanalysis/:id", getAnalysis);
 UserAuthRouter.post("/logout", logout);
 
 export default UserAuthRouter;

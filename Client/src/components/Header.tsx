@@ -1,31 +1,27 @@
-import ShinyText from "../Animation/ShinyText/ShinyText";
 import VariableProximity from "@/Animation/VariableProximity/VariableProximity";
-import { useState, useRef, useEffect } from "react";
+import {  useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useLogoutMutation } from "@/redux/slices/api";
+import { useLogoutMutation, useGoogleSignInMutation } from "@/redux/slices/api";
 import { Link, useNavigate } from "react-router-dom";
 import {
   setCurrentWidth,
   updateCurrentUser,
   updateIsLoggedIn,
+  updateLoginMethod,
 } from "@/redux/slices/appSlice";
 import Cookies from "js-cookie";
-import { googleLogout } from "@react-oauth/google";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { googleLogout, GoogleLogin } from "@react-oauth/google";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "./ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Header() {
   const containerRef = useRef(null);
-  const [sheetOpen, setSheetOpen] = useState<boolean>(false);
   const windowWidth = useSelector(
     (state: RootState) => state.appSlice.currentWidth
   );
@@ -38,6 +34,7 @@ export default function Header() {
     (state: RootState) => state.appSlice.loginMethod
   );
   const [logoutMutation] = useLogoutMutation();
+  const [loginWithGoogle] = useGoogleSignInMutation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,14 +46,11 @@ export default function Header() {
   const handleLogout = async () => {
     try {
       await logoutMutation().unwrap();
-
       if (loginMethod === "google") googleLogout();
       else if (loginMethod === "github") console.log("Logged out from GitHub");
-
       dispatch(updateIsLoggedIn(false));
       dispatch(updateCurrentUser(null));
       Cookies.remove("token");
-
       setTimeout(() => dispatch(setCurrentWidth(window.innerWidth)), 0);
       navigate("/");
     } catch (error) {
@@ -64,10 +58,27 @@ export default function Header() {
     }
   };
 
+  const handleGoogleLoginSuccess = async (credentialResponse: any) => {
+    try {
+      const { credential } = credentialResponse;
+      const data = await loginWithGoogle({ idToken: credential }).unwrap();
+      console.log("Google Login Response:", data);
+      const { token, user } = data;
+      Cookies.set("token", token, { expires: 7 });
+      dispatch(updateCurrentUser(user));
+      dispatch(updateIsLoggedIn(true));
+      dispatch(updateLoginMethod("google"));
+      if (!user.collegeName || !user.collegeLocation || !user.graduationYear || !user.branch)
+        navigate("/userdetails", { replace: true });
+      else navigate("/home", { replace: true });
+    } catch (error) {
+      console.error("Google Login Failed:", error);
+    }
+  };
+
   return (
     <header className="w-full fixed top-0 left-0 shadow-md z-50 bg-black">
       <div className="lg:px-16 px-4 flex flex-wrap items-center py-4 justify-between">
-        {/* Logo */}
         <div ref={containerRef} className="flex items-center relative">
           <Link to="/" className="no-underline">
             <VariableProximity
@@ -82,41 +93,33 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Navigation Links */}
         <nav className="md:flex md:items-center md:w-auto w-full hidden md:block">
           <ul  className="md:flex items-center justify-center text-base text-gray-600">
             <li>
-              <a
-                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
-                href="/home"
-              >
+              <a className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full" href="/home">
                 Home
               </a>
             </li>
-
-            {isLoggedIn && (
+          </ul>
+          <ul className="md:flex items-center justify-center text-base text-gray-400">
               <li>
-                <a
-                  href="/user-experience-form-1"
-                  className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
-                >
+                <a href="/user-experience-form-1" className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300">
                   Share Experience
                 </a>
               </li>
-            )}
-
             <li>
-              <a
-                className="relative md:p-4 py-3 px-0 block transform transition-all duration-300 hover:scale-110 after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
-                href="/CollegeCompanies"
-              >
+              <a href="/CollegeCompanies" className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300">
                 Interview Experiences
+              </a>
+            </li>
+            <li>
+              <a href="/Chat" className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300">
+                 Live Chat 
               </a>
             </li>
           </ul>
         </nav>
 
-        {/* Buttons / Auth Section */}
         <div className="flex items-center">
           {windowWidth > 500 ? (
             <ul className="flex gap-4">
@@ -125,84 +128,23 @@ export default function Header() {
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center">
                       <Avatar>
-                        <AvatarImage
-                          src={currentUser?.picture || "/default-avatar.png"}
-                          alt="User Avatar"
-                        />
+                        <AvatarImage src={currentUser?.picture || "/default-avatar.png"} alt="User Avatar" />
                         <AvatarFallback>U</AvatarFallback>
                       </Avatar>
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-48 bg-black">
-                    <DropdownMenuItem className="text-white font-semibold !hover:bg-transparent !hover:text-white bg-black">
-                      Hello, {currentUser?.name || "User"}!
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={handleLogout}
-                      className="cursor-pointer text-red-500 !hover:bg-transparent !hover:text-red-500"
-                    >
+                    <DropdownMenuItem className="text-white font-semibold">Hello, {currentUser?.name || "User"}!</DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500">
                       Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <li>
-                  <Link to="/signup">
-                    <Button>
-                      <ShinyText
-                        text="Sign Up"
-                        disabled={false}
-                        speed={3}
-                        className="custom-class"
-                      />
-                    </Button>
-                  </Link>
-                </li>
+                <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={() => console.error("Google Login Failed")} />
               )}
             </ul>
-          ) : (
-            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-              <SheetTrigger asChild>
-                <Button>
-                  <GiHamburgerMenu />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full">
-                <ul className="flex flex-col gap-2">
-                  <li>
-                    <a href="/" className="p-2 block">
-                      Home
-                    </a>
-                  </li>
-                  {isLoggedIn && (
-                    <li>
-                      <a href="/user-experience-form" className="p-2 block">
-                        Share Experience
-                      </a>
-                    </li>
-                  )}
-                  {isLoggedIn ? (
-                    <li>
-                      <Button onClick={handleLogout}>Logout</Button>
-                    </li>
-                  ) : (
-                    <li>
-                      <Link to="/signup">
-                        <Button>
-                          <ShinyText
-                            text="Sign Up"
-                            disabled={false}
-                            speed={3}
-                            className="custom-class"
-                          />
-                        </Button>
-                      </Link>
-                    </li>
-                  )}
-                </ul>
-              </SheetContent>
-            </Sheet>
-          )}
+          ) : null}
         </div>
       </div>
     </header>

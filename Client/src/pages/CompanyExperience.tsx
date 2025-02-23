@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { addCompany, setCollege, setCompanies, updateCompanies } from "@/redux/slices/appSlice";
+import { addCompany, setCollege, setCompanies } from "@/redux/slices/appSlice";
 
 export interface CollegeCompany {
   id: string;
@@ -12,7 +12,9 @@ export interface CollegeCompany {
 }
 
 interface CompanyExperienceProps {
-  selectedCollege: { id: string };
+  selectedCollege: {
+    name: string; id: string 
+};
 }
 
 const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
