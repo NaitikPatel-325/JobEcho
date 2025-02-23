@@ -81,7 +81,7 @@ const Home = () => {
         <div className="mt-6 flex justify-center w-full max-w-lg">
           <button
             className="px-8 py-4 bg-purple-600 text-white font-semibold rounded-md text-lg hover:bg-purple-700 active:opacity-75 transition"
-            onClick={() => navigate("/Home")}
+            onClick={() => navigate("/CollegeCompanies")}
           >
             Get Started →
           </button>
