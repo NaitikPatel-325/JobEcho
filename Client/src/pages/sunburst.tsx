@@ -13,7 +13,10 @@ const SunburstChart = () => {
       try {
         // Fetch all colleges
         const response = await fetch(
-          "http://localhost:3000/user/getallCollages"
+          "http://localhost:3000/user/getallCollages", {
+            method: "GET", 
+            credentials: "include" // Allows cookies to be sent with the request
+        }
         );
         if (!response.ok) throw new Error("Failed to fetch colleges");
         const colleges = await response.json();
@@ -25,7 +28,10 @@ const SunburstChart = () => {
         // Fetch companies for each college
         const companyPromises = colleges.map(async (college: any) => {
           const companyResponse = await fetch(
-            `http://localhost:3000/user/getCollegesandcompany/${college._id}`
+            `http://localhost:3000/user/getCollegesandcompany/${college._id}`, {
+              method: "GET", 
+              credentials: "include" // Allows cookies to be sent with the request
+          }
           );
           if (!companyResponse.ok) return [];
           return companyResponse.json();

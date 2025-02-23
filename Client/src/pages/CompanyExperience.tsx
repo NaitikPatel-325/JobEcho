@@ -16,9 +16,7 @@ interface CompanyExperienceProps {
 }
 
 const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
-  const [filteredColleges, setFilteredColleges] = useState<CollegeCompany[]>(
-    []
-  );
+  const [filteredColleges, setFilteredColleges] = useState<CollegeCompany[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -39,14 +37,10 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/user/getCollegesandcompany/${selectedCollege}`,
-          {
-            method: "GET",
-            credentials: "include", // Include cookies with the request
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          `http://localhost:3000/user/getCollegesandcompany/${selectedCollege}`, {
+            method: "GET", 
+            credentials: "include" // Allows cookies to be sent with the request
+        }
         );
 
         
@@ -125,14 +119,6 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
                       </div>
                     </div>
                   </CardContent>
-                  <div className="absolute inset-0 bg-blue-900/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                    <div className="p-6 h-full flex flex-col justify-center items-center text-center">
-                      <h3 className="text-xl font-semibold mb-2 text-white">Visit Profile</h3>
-                      <p className="text-blue-200 mb-4">
-                        Click to view detailed interview experience and more insights
-                      </p>
-                    </div>
-                  </div>
                 </Card>
               </motion.div>
             ))

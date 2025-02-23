@@ -9,8 +9,9 @@ import {
 import { useSearchParams } from "react-router-dom";
 import CompanyExperience from "./CompanyExperience";
 import InterviewExperience from "./InterviewExperience";
-import Sunburst from 'sunburst-chart';
 import SunburstChart from "./sunburst";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 export interface College {
   id: string;
@@ -18,6 +19,7 @@ export interface College {
   location: string;
   rating: number;
 }
+
 
 export default function CollegeCompanies() {
   const [colleges, setColleges] = useState<College[]>([]);
@@ -28,23 +30,32 @@ export default function CollegeCompanies() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+
   const companyId = searchParams.get("id");
+
+  const companiesforcollege = useSelector(
+    (state: RootState) => state.appSlice.college.companies
+  );
 
   console.log("Inside college : ",companyId);
 
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/getallCollages");
-        
+        const response = await fetch("http://localhost:3000/user/getallCollages", {
+          method: "GET", 
+          credentials: "include" // Allows cookies to be sent with the request
+      });
+      
+
         if (!response.ok) throw new Error("Failed to fetch colleges");
         const data = await response.json();
-
+  
         const formattedColleges = data.map((college: any) => ({
           id: college._id,
-          name: college.collegeName,
+          name: college.collegeName, 
           location: college.location,
-          rating: college.rating || 0,
+          rating: college.rating || 0, 
         }));
   
         setColleges(formattedColleges);
@@ -55,7 +66,7 @@ export default function CollegeCompanies() {
         setLoading(false);
       }
     };
-
+  
     fetchColleges();
   }, []);
   
@@ -63,11 +74,10 @@ export default function CollegeCompanies() {
   const filteredColleges = colleges.filter((college) =>
     college?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
-  if (loading)
-    return <div className="text-white text-center p-10">Loading...</div>;
-  if (error)
-    return <div className="text-red-500 text-center p-10">{error}</div>;
+  if (loading) return <div className="text-white text-center p-10">Loading...</div>;
+  if (error) return <div className="text-red-500 text-center p-10">{error}</div>;
 
   return (
     <>
@@ -122,44 +132,54 @@ export default function CollegeCompanies() {
             </motion.div>
 
             <motion.div className="space-y-2.5 overflow-y-auto max-h-[calc(100vh-260px)] pr-2 custom-scrollbar">
-              <AnimatePresence mode="wait">
-                {filteredColleges.map((college) => (
-                  <motion.div key={college.id} className="relative">
-                    <motion.button
-                      onClick={() => setSelectedCollege(college)}
-                      whileHover={{ scale: 1.02, x: 5 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`w-full text-left p-4 rounded-xl transition-all duration-200 ${
-                        selectedCollege?.id === college.id 
-                          ? "bg-white/10 border-2 border-white/20" 
-                          : "bg-white/5 hover:bg-white/10 border border-white/10"
-                      }`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-white">{college.name}</span>
-                        <div className="flex items-center space-x-3">
-                          <motion.div
-                            animate={selectedCollege?.id === college.id ? 
-                              { scale: [1, 1.2, 1], rotate: [0, 360] } : {}}
-                            transition={{ duration: 0.5 }}
-                            className="flex items-center"
-                          >
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span className="ml-1.5 text-sm text-gray-300">{college.rating}</span>
-                          </motion.div>
-                          <motion.div
-                            animate={selectedCollege?.id === college.id ? 
-                              { x: [0, 5, 0], opacity: 1 } : { opacity: 0 }}
-                          >
-                            <ChevronRight className="w-4 h-4 text-blue-400" />
-                          </motion.div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-400 mt-1.5">{college.location}</p>
-                    </motion.button>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+            <AnimatePresence mode="wait">
+  {companiesforcollege.length > 0 ? (
+    companiesforcollege.map((company) => (
+      <motion.div key={company} className="relative">
+        <motion.button
+          whileHover={{ scale: 1.02, x: 5 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full text-left p-4 rounded-xl transition-all duration-200 bg-white/10 border-2 border-white/20"
+        >
+          <div className="flex justify-between items-center">
+            <span className="font-medium text-white">{company}</span>
+          </div>
+        </motion.button>
+      </motion.div>
+    ))
+  ) : (
+    filteredColleges
+      .filter((college) => !companiesforcollege.includes(college.name))
+      .map((college) => (
+        <motion.div key={college.id} className="relative">
+          <motion.button
+            onClick={() => setSelectedCollege(college)}
+            whileHover={{ scale: 1.02, x: 5 }}
+            whileTap={{ scale: 0.98 }}
+            className={`w-full text-left p-4 rounded-xl transition-all duration-200 ${
+              selectedCollege?.id === college.id 
+                ? "bg-white/10 border-2 border-white/20" 
+                : "bg-white/5 hover:bg-white/10 border border-white/10"
+            }`}
+          >
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-white">{college.name}</span>
+              <div className="flex items-center space-x-3">
+                <motion.div
+                  animate={selectedCollege?.id === college.id ? 
+                    { x: [0, 5, 0], opacity: 1 } : { opacity: 0 }}
+                >
+                  <ChevronRight className="w-4 h-4 text-blue-400" />
+                </motion.div>
+              </div>
+            </div>
+            <p className="text-sm text-gray-400 mt-1.5">{college.location}</p>
+          </motion.button>
+        </motion.div>
+      ))
+  )}
+</AnimatePresence>
+
             </motion.div>
           </ResizablePanel>
 
@@ -180,6 +200,7 @@ export default function CollegeCompanies() {
           </ResizablePanel>
         </ResizablePanelGroup>
         <SunburstChart/>
+
       </div>
     </div>
     </>

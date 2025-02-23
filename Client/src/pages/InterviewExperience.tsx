@@ -187,11 +187,9 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
                   <div className="absolute inset-0 bg-blue-900/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                     <div className="p-6 h-full flex flex-col justify-center items-center text-center">
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        Visit Profile
                       </h3>
                       <p className="text-blue-200 mb-4">
-                        Click to view detailed interview experience and more
-                        insights
+
                       </p>
                     </div>
                   </div>

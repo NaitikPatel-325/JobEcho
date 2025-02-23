@@ -61,10 +61,11 @@ export default function Header() {
     }
   };
 
+
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {
       const { credential } = credentialResponse;
-      const dispatch = useDispatch();
+      
 
       const data = await loginWithGoogle({ idToken: credential }).unwrap();
       console.log("Google Login Response:", data);
