@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Search, GraduationCap, Star, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, GraduationCap, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ResizableHandle,
@@ -25,7 +25,7 @@ export default function CollegeCompanies() {
   const [colleges, setColleges] = useState<College[]>([]);
   const [selectedCollege, setSelectedCollege] = useState<College | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -191,9 +191,9 @@ export default function CollegeCompanies() {
             <AnimatePresence mode="wait">
               <motion.div key={searchParams.get("id")} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }} className="h-full">
                 {searchParams.get("id") ? (
-                  <InterviewExperience company_id={searchParams.get("id")} />
+                  <InterviewExperience company_id={searchParams.get("id") || ""} />
                 ) : (
-                  selectedCollege && <CompanyExperience selectedCollege={selectedCollege?.id} />
+                  selectedCollege && <CompanyExperience selectedCollege={selectedCollege} />
                 )}
               </motion.div>
             </AnimatePresence>

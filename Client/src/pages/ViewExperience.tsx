@@ -31,7 +31,7 @@ interface IExperienceSubmission {
 
 export default function ViewExperience() {
   const { id } = useParams<{ id: string }>();
-  const [experience, setExperience] = useState<IExperienceSubmission | null>(
+  const [experience] = useState<IExperienceSubmission | null>(
     null
   );
   const [relatedExperiences, setRelatedExperiences] = useState<
