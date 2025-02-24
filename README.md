@@ -49,7 +49,7 @@ JobEcho is a web-based platform designed to help students track their placement 
 ## Screenshots
 ![Image](https://github.com/user-attachments/assets/5af81eee-c937-41ef-a6d7-a8dda5f54d8a)
 
-![Image](https://github.com/user-attachments/assets/7fff7467-fc27-4182-a343-05420e53d5a9)
+![Image](https://github.com/user-attachments/assets/a8c77271-f4e3-461d-a61d-d37bad17fde2)
 
 ![Image](https://github.com/user-attachments/assets/27e90b43-b787-4ee0-bf10-35e9c43e0ef3)
 
