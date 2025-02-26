@@ -37,13 +37,15 @@ const InterviewExperience = ({ company_id }: { company_id: string }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
         //console.log("Fetching experiences for company_id:", company_id);
         const response = await axios.get(
-          `https://jobecho-iex4.onrender.com/experience/get-experience-by-company/${company_id}`,
+          `${API_BASE_URL}/experience/get-experience-by-company/${company_id}`,
           {
             withCredentials: true, // This sends cookies with the request
           }

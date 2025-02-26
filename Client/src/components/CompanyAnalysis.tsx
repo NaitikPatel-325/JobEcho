@@ -10,10 +10,10 @@ export default function CompanyAnalysis() {
   const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const cleanAnalysisText = (text:any) => {
-    return text
-      .replace(/[*_~`]/g, "") // Remove special symbols
-      .replace(/([.!?])\s*/g, "$1\n"); // Add new lines after punctuation
+    return text.replace(/[*_~`]/g, "").replace(/([.!?])\s*/g, "$1\n");
   };
 
   const fetchAnalysis = async () => {
@@ -22,10 +22,10 @@ export default function CompanyAnalysis() {
 
     try {
       const companyResponse = await fetch(
-        `https://jobecho-iex4.onrender.com/company/getbyname/${company}`,
+        `${API_BASE_URL}/company/getbyname/${company}`,
         {
-          method : "GET",
-          credentials: "include", 
+          method: "GET",
+          credentials: "include",
         }
       );
       const companyData = await companyResponse.json();
@@ -40,8 +40,9 @@ export default function CompanyAnalysis() {
       const companyId = companyData._id;
 
       const analysisResponse = await fetch(
-        `https://jobecho-iex4.onrender.com/user/getaipowerdanalysis/${companyId}`,{
-          method : "GET",
+        `${API_BASE_URL}/user/getaipowerdanalysis/${companyId}`,
+        {
+          method: "GET",
           credentials: "include",
         }
       );
@@ -49,9 +50,13 @@ export default function CompanyAnalysis() {
 
       console.log("Raw Analysis Data:", analysisData);
 
-      const cleanedAnalysis = cleanAnalysisText(analysisData.analysis);
-      setAnalysis(cleanedAnalysis);
+      if (!analysisData || !analysisData.analysis) {
+        setAnalysis("⚠️ No analysis found for this company.");
+      } else {
+        setAnalysis(cleanAnalysisText(analysisData.analysis));
+      }
     } catch (error) {
+      console.error("Error fetching analysis:", error);
       setAnalysis("⚠️ Error fetching analysis. Please try again.");
     }
 

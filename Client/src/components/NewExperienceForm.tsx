@@ -34,6 +34,7 @@ const itemVariants = {
 };
 
 export default function NewExperienceForm() {
+  const API_BASE_URL =import.meta.env.VITE_API_BASE_URL;
   const [step, setStep] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -63,7 +64,7 @@ export default function NewExperienceForm() {
   useEffect(() => {
     const fetchCollegeNames = async () => {
       try {
-        const response = await fetch("https://jobecho-iex4.onrender.com/user/getallCollages", {
+        const response = await fetch(`${API_BASE_URL}/user/getallCollages`, {
           method: "GET", 
           credentials: "include" // Allows cookies to be sent with the request
       });
@@ -79,7 +80,7 @@ export default function NewExperienceForm() {
     // Fetch companies once
     const fetchAllCompanies = async () => {
       try {
-        const response = await fetch("https://jobecho-iex4.onrender.com/company", {
+        const response = await fetch(`${API_BASE_URL}/company`, {
           method: "GET", 
           credentials: "include" // Allows cookies to be sent with the request
       });
@@ -134,8 +135,10 @@ export default function NewExperienceForm() {
       results,
     };
 
+
+
     try {
-      const response = await fetch("https://jobecho-iex4.onrender.com/user/submit-experience", {
+      const response = await fetch(`${API_BASE_URL}/user/submit-experience`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

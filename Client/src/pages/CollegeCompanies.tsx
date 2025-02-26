@@ -36,13 +36,14 @@ export default function CollegeCompanies() {
   const companiesforcollege = useSelector(
     (state: RootState) => state.appSlice.college.companies
   );
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  console.log("Inside View  : ",API_BASE_URL);
   console.log("Inside college : ",companyId);
 
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await fetch("https://jobecho-iex4.onrender.com/user/getallCollages", {
+        const response = await fetch(`${API_BASE_URL}/user/getallCollages`, {
           method: "GET", 
           credentials: "include" // Allows cookies to be sent with the request
       });

@@ -27,7 +27,7 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
   console.log(selectedCollege);
 
   const dispatch = useDispatch();
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     const fetchCompanies = async () => {
       if (!selectedCollege) return;
@@ -39,7 +39,7 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
 
       try {
         const response = await fetch(
-          `https://jobecho-iex4.onrender.com/user/getCollegesandcompany/${selectedCollege}`, {
+          `${API_BASE_URL}/user/getCollegesandcompany/${selectedCollege}`, {
             method: "GET", 
             credentials: "include" // Allows cookies to be sent with the request
         }

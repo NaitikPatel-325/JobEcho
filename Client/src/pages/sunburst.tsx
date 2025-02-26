@@ -7,13 +7,14 @@ const SunburstChart = () => {
     parents: string[];
     values: number[];
   } | null>(null);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch all colleges
         const response = await fetch(
-          "https://jobecho-iex4.onrender.com/user/getallCollages", {
+          `${API_BASE_URL}/user/getallCollages`, {
             method: "GET", 
             credentials: "include" // Allows cookies to be sent with the request
         }
@@ -28,7 +29,7 @@ const SunburstChart = () => {
         // Fetch companies for each college
         const companyPromises = colleges.map(async (college: any) => {
           const companyResponse = await fetch(
-            `https://jobecho-iex4.onrender.com/user/getCollegesandcompany/${college._id}`, {
+            `${API_BASE_URL}/user/getCollegesandcompany/${college._id}`, {
               method: "GET", 
               credentials: "include" // Allows cookies to be sent with the request
           }

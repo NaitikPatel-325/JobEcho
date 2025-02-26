@@ -26,6 +26,8 @@ export default function ExperienceForm() {
     { company: string; status: string; lpa?: string }[]
   >([]);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const addNewExperience = () => {
     setExperiences([...experiences, { company: "", year: "", rounds: [] }]);
   };
@@ -66,7 +68,7 @@ export default function ExperienceForm() {
 
     try {
       const response = await fetch(
-        "https://jobecho-iex4.onrender.com/user/submit-experience",
+        `${API_BASE_URL}/user/submit-experience`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

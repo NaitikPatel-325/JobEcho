@@ -13,7 +13,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 
 export async function generatePromptResponse(prompt: string): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
     const result = await model.generateContent(prompt);
     const response = result.response.text(); 
     console.log("Generated Response:", response);

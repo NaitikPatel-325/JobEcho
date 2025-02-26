@@ -36,7 +36,7 @@ export interface signupCredentialsType {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://jobecho-iex4.onrender.com",
+    baseUrl: import.meta.env.VITE_API_BASE_URL, 
     credentials: "include",
   }),
   tagTypes: ["myCodes", "allCodes"],

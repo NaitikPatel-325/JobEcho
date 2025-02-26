@@ -37,12 +37,13 @@ export default function ViewExperience() {
   const [relatedExperiences, setRelatedExperiences] = useState<
     IExperienceSubmission[]
   >([]);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchExperience = async () => {
       try {
         const response = await axios.get(
-          `https://jobecho-iex4.onrender.com/user/InterviewExperience/${id}`,
+          `${API_BASE_URL}/user/InterviewExperience/${id}`,
           {
             withCredentials: true, // This ensures cookies are sent with the request
           }
@@ -53,7 +54,7 @@ export default function ViewExperience() {
         const companyName = response.data.experiences[0]?.company;
         if (companyName) {
           const relatedResponse = await axios.get(
-            `https://jobecho-iex4.onrender.com/user/InterviewExperience?company=${companyName}`,
+            `${API_BASE_URL}/user/InterviewExperience?company=${companyName}`,
             {
               withCredentials: true, // Sends cookies with the request
             }
