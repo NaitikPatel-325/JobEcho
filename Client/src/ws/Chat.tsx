@@ -17,7 +17,7 @@ const Chat: React.FC = () => {
   useEffect(() => {
     if (wsRef.current) return;
     const connectWebSocket = () => {
-      const socket = new WebSocket("ws://localhost:3000");
+      const socket = new WebSocket("wss://jobecho-iex4.onrender.com");
       wsRef.current = socket;
 
       socket.onopen = () => {
