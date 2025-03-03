@@ -1,26 +1,24 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 import dotenv from "dotenv";
 
-dotenv.config(); 
+dotenv.config();
 
-const API_KEY = process.env.API_KEY; 
-
-if (!API_KEY) {
-  throw new Error("API_KEY is missing. Please set it in your .env file.");
-}
-
-const genAI = new GoogleGenerativeAI(API_KEY);
+const client = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 export async function generatePromptResponse(prompt: string): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
-    const result = await model.generateContent(prompt);
-    const response = result.response.text(); 
-    console.log("Generated Response:", response);
-    return response;
+    const response = await client.chat.completions.create({
+      model: "openai/gpt-3.5-turbo", 
+      messages: [{ role: "user", content: prompt }],
+    });
+    const message = response.choices[0]?.message?.content || "No response.";
+    console.log("Generated Response:", message);
+    return message;
   } catch (error) {
     console.error("Error generating response:", error);
     return "Error generating response.";
   }
 }
-

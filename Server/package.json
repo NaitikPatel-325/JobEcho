@@ -25,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.1",
     "nodemon": "^3.1.9",
+    "openai": "^4.86.1",
     "ts-node": "^10.9.2",
     "ws": "^8.18.1"
   },
