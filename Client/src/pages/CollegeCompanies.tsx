@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { Search, GraduationCap, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import { useSearchParams } from "react-router-dom";
 import CompanyExperience from "./CompanyExperience";
 import InterviewExperience from "./InterviewExperience";
@@ -82,128 +77,176 @@ export default function CollegeCompanies() {
 
   return (
     <>
-    
-    <div className="min-h-screen p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div className="max-w-[1800px] mx-auto">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} 
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 text-center"
-        >
-          <motion.div className="flex items-center justify-center mb-2">
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="mr-3"
-            >
-              <GraduationCap className="w-7 h-7 text-white/90" />
-            </motion.div>
-            <h1 className="text-3xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-              College Explorer
-            </h1>
-          </motion.div>
-          <motion.p 
-            className="text-sm text-gray-300"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+      <div className="min-h-screen w-full bg-gradient-to-b from-slate-950/90 via-slate-900/90 to-slate-950/90 text-white">
+        <div className="mx-auto w-full max-w-7xl px-6 py-8 lg:py-10">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
           >
-            Discover your perfect educational journey
-          </motion.p>
-        </motion.div>
-
-        <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-160px)] rounded-2xl border border-white/20 shadow-2xl bg-gray-900/50 backdrop-blur-xl">
-          <ResizablePanel defaultSize={35} minSize={30} className="p-4">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4">
-              <motion.div animate={isSearchFocused ? { scale: 1.02 } : { scale: 1 }} className="relative">
-                <input
-                  type="text"
-                  placeholder="Search colleges..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-                />
-                <motion.div animate={isSearchFocused ? { x: [0, 5, 0] } : {}}>
-                  <Search className="absolute right-4 top-3 h-4 w-4 text-gray-400" />
-                </motion.div>
+            <motion.div className="flex items-center justify-center mb-2">
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="mr-3 rounded-full bg-slate-800/80 p-2 shadow-[0_0_25px_rgba(56,189,248,0.35)]"
+              >
+                <GraduationCap className="w-7 h-7 text-sky-400" />
               </motion.div>
+              <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500">
+                College Explorer
+              </h1>
             </motion.div>
+            <motion.p
+              className="text-sm text-slate-300"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Discover placement insights and interview experiences across colleges
+            </motion.p>
+          </motion.div>
 
-            <motion.div className="space-y-2.5 overflow-y-auto max-h-[calc(100vh-260px)] pr-2 custom-scrollbar">
-            <AnimatePresence mode="wait">
-  {companiesforcollege.length > 0 ? (
-    companiesforcollege.map((company) => (
-      <motion.div key={company} className="relative">
-        <motion.button
-          whileHover={{ scale: 1.02, x: 5 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full text-left p-4 rounded-xl transition-all duration-200 bg-white/10 border-2 border-white/20"
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-medium text-white">{company}</span>
-          </div>
-        </motion.button>
-      </motion.div>
-    ))
-  ) : (
-    filteredColleges
-      .filter((college) => !companiesforcollege.includes(college.name))
-      .map((college) => (
-        <motion.div key={college.id} className="relative">
-          <motion.button
-            onClick={() => setSelectedCollege(college)}
-            whileHover={{ scale: 1.02, x: 5 }}
-            whileTap={{ scale: 0.98 }}
-            className={`w-full text-left p-4 rounded-xl transition-all duration-200 ${
-              selectedCollege?.id === college.id 
-                ? "bg-white/10 border-2 border-white/20" 
-                : "bg-white/5 hover:bg-white/10 border border-white/10"
-            }`}
-          >
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-white">{college.name}</span>
-              <div className="flex items-center space-x-3">
+          {/* Main content */}
+          <div className="mt-8 grid w-full gap-6 lg:grid-cols-[minmax(260px,320px),minmax(0,1fr)] items-start">
+            {/* Left sidebar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="h-[calc(100vh-200px)] rounded-2xl bg-slate-900/80 border border-white/10 shadow-2xl backdrop-blur-xl p-4 flex flex-col space-y-4"
+            >
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-400 mb-2">
+                  Browse
+                </p>
                 <motion.div
-                  animate={selectedCollege?.id === college.id ? 
-                    { x: [0, 5, 0], opacity: 1 } : { opacity: 0 }}
+                  animate={isSearchFocused ? { scale: 1.02 } : { scale: 1 }}
+                  className="relative"
                 >
-                  <ChevronRight className="w-4 h-4 text-blue-400" />
+                  <input
+                    type="text"
+                    placeholder="Search colleges..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
+                    className="w-full rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/60 focus:border-sky-400/60 transition-all duration-200"
+                  />
+                  <motion.div animate={isSearchFocused ? { x: [0, 5, 0] } : {}}>
+                    <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
+                  </motion.div>
                 </motion.div>
               </div>
-            </div>
-            <p className="text-sm text-gray-400 mt-1.5">{college.location}</p>
-          </motion.button>
-        </motion.div>
-      ))
-  )}
-</AnimatePresence>
 
-            </motion.div>
-          </ResizablePanel>
+              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-          <ResizableHandle>
-            <motion.div whileHover={{ scale: 1.1 }} className="bg-white/20 hover:bg-white/30 transition-colors h-full w-1.5 rounded-full" />
-          </ResizableHandle>
-
-          <ResizablePanel defaultSize={65} className="p-5">
-            <AnimatePresence mode="wait">
-              <motion.div key={searchParams.get("id")} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }} className="h-full">
-                {searchParams.get("id") ? (
-                  <InterviewExperience company_id={searchParams.get("id") || ""} />
-                ) : (
-                  selectedCollege && <CompanyExperience selectedCollege={selectedCollege} />
-                )}
+              <motion.div className="space-y-2.5 overflow-y-auto pr-1 custom-scrollbar flex-1">
+                <AnimatePresence mode="wait">
+                  {companiesforcollege.length > 0 ? (
+                    companiesforcollege.map((company) => (
+                      <motion.div key={company} className="relative" layout>
+                        <motion.button
+                          whileHover={{ scale: 1.02, x: 4 }}
+                          whileTap={{ scale: 0.97 }}
+                          className="w-full text-left p-3.5 rounded-xl transition-all duration-200 bg-white/5 hover:bg-white/10 border border-white/15 flex items-center justify-between"
+                        >
+                          <span className="font-medium text-sm text-white">
+                            {company}
+                          </span>
+                        </motion.button>
+                      </motion.div>
+                    ))
+                  ) : (
+                    filteredColleges
+                      .filter(
+                        (college) => !companiesforcollege.includes(college.name)
+                      )
+                      .map((college) => (
+                        <motion.div key={college.id} className="relative" layout>
+                          <motion.button
+                            onClick={() => setSelectedCollege(college)}
+                            whileHover={{ scale: 1.02, x: 4 }}
+                            whileTap={{ scale: 0.97 }}
+                            className={`w-full text-left p-3.5 rounded-xl transition-all duration-200 flex flex-col gap-1 ${
+                              selectedCollege?.id === college.id
+                                ? "bg-sky-500/15 border border-sky-400/70 shadow-[0_0_25px_rgba(56,189,248,0.4)]"
+                                : "bg-white/5 hover:bg-white/10 border border-white/10"
+                            }`}
+                          >
+                            <div className="flex justify-between items-center">
+                              <span className="font-medium text-sm text-white">
+                                {college.name}
+                              </span>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-[11px] text-slate-400">
+                                  {college.location}
+                                </span>
+                                <motion.div
+                                  animate={
+                                    selectedCollege?.id === college.id
+                                      ? { x: [0, 4, 0], opacity: 1 }
+                                      : { opacity: 0.4 }
+                                  }
+                                >
+                                  <ChevronRight className="w-4 h-4 text-sky-400" />
+                                </motion.div>
+                              </div>
+                            </div>
+                          </motion.button>
+                        </motion.div>
+                      ))
+                  )}
+                </AnimatePresence>
               </motion.div>
-            </AnimatePresence>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-        <SunburstChart/>
+            </motion.div>
 
+            {/* Right content */}
+            <div className="flex flex-col h-[calc(100vh-200px)] space-y-6">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={searchParams.get("id") || selectedCollege?.id || "default"}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="rounded-2xl bg-slate-900/85 border border-white/10 shadow-2xl backdrop-blur-xl p-4 sm:p-5 lg:p-6 flex-1 min-h-[260px]"
+                >
+                  {searchParams.get("id") ? (
+                    <InterviewExperience company_id={searchParams.get("id") || ""} />
+                  ) : (
+                    selectedCollege && (
+                      <CompanyExperience selectedCollege={selectedCollege} />
+                    )
+                  )}
+                </motion.div>
+              </AnimatePresence>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="rounded-2xl bg-slate-900/85 border border-white/10 shadow-2xl backdrop-blur-xl p-4 sm:p-5"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-400">
+                      Overview
+                    </p>
+                    <h2 className="text-sm sm:text-base font-semibold text-white">
+                      Company & College Placement Snapshot
+                    </h2>
+                  </div>
+                </div>
+                <div className="w-full overflow-hidden">
+                  <SunburstChart />
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
     </>
   );
 }

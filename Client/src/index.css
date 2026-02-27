@@ -202,7 +202,6 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
-
 body, html {
   background-color: black !important;
   color: white !important;
@@ -211,3 +210,4 @@ body, html {
 #root {
   background-color: black !important;
 }
+
