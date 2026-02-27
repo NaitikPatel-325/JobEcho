@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
 import { OAuth2Client } from "google-auth-library";
-import axios from "axios";
 
 dotenv.config();
 

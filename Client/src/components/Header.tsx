@@ -73,7 +73,8 @@ export default function Header() {
       const { token, user } = data;
 
       Cookies.set("token", token, { expires: 7 });
-      console.log("Token is ", token);
+      // console.log("Token is ", token);
+      console.log(user.picture);
       localStorage.setItem("USER", JSON.stringify(user));
 
       // user=localStorage.getItem("USER");
@@ -171,7 +172,7 @@ export default function Header() {
                     <button className="flex items-center">
                       <Avatar>
                         <AvatarImage
-                          src={currentUser?.picture || "/default-avatar.png"}
+                          src={currentUser?.user?.picture || "/default-avatar.png"}
                           alt="User Avatar"
                         />
                         <AvatarFallback>U</AvatarFallback>
@@ -180,7 +181,7 @@ export default function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-48 bg-black">
                     <DropdownMenuItem className="text-white font-semibold">
-                      Hello, {currentUser?.name || "User"}!
+                      Hello, {currentUser?.user?.name || "User"}!
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={handleLogout}
