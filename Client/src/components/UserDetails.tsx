@@ -39,6 +39,17 @@ export default function UserDetails() {
     setIsFormLoaded(true);
   }, []);
 
+  useEffect(() => {
+    if (isSuccess && data) {
+      setCollegeName(data.collegeName || "");
+      setCollegeLocation(data.collegeLocation || "");
+      setGraduationYear(
+        data.graduationYear ? String(data.graduationYear) : ""
+      );
+      setBranch(data.branch || "");
+    }
+  }, [isSuccess, data]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
@@ -63,8 +74,8 @@ export default function UserDetails() {
     <div className={`fixed inset-0 flex items-center justify-center ${isFormLoaded ? "backdrop-blur-sm" : ""}`}>
       <Card className="relative w-[1000px] overflow-hidden p-8">
         <CardHeader>
-          <CardTitle>User Details</CardTitle>
-          <CardDescription>Enter your academic details.</CardDescription>
+          <CardTitle>Update Profile</CardTitle>
+          <CardDescription>Update your academic details.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -72,7 +83,7 @@ export default function UserDetails() {
               <div className="flex justify-between gap-8">
                 <div className="flex flex-col space-y-1.5 w-2/3">
                   <Label htmlFor="college">College Name</Label>
-                  <Select onValueChange={setCollegeName}>
+                  <Select value={collegeName} onValueChange={setCollegeName}>
                     <SelectTrigger id="college" className="w-full">
                       <SelectValue placeholder="Select College" />
                     </SelectTrigger>
@@ -113,7 +124,7 @@ export default function UserDetails() {
                 </div>
                 <div className="flex flex-col space-y-1.5 w-1/2">
                   <Label htmlFor="branch">Branch</Label>
-                  <Select onValueChange={setBranch}>
+                  <Select value={branch} onValueChange={setBranch}>
                     <SelectTrigger id="branch" className="w-full">
                       <SelectValue placeholder="Select Branch" />
                     </SelectTrigger>
@@ -134,7 +145,7 @@ export default function UserDetails() {
               </div>
             </div>
             <CardFooter className="flex justify-end mt-4">
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Save Changes</Button>
             </CardFooter>
           </form>
         </CardContent>

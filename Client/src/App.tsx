@@ -6,7 +6,8 @@ import Header from "./components/Header";
 import { useDispatch } from "react-redux";
 import { useGetUserDetailsQuery } from "./redux/slices/api";
 import { useEffect } from "react";
-import {  updateCurrentUser, updateIsLoggedIn } from "./redux/slices/appSlice";
+import { updateCurrentUser, updateIsLoggedIn } from "./redux/slices/appSlice";
+import { ToastProvider } from "./components/ui/toast";
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -28,10 +29,11 @@ function AppContent() {
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
-      {location.pathname !== "/" &&
-        location.pathname !== "/user-experience-form-1" && <Header />}
-
-      <AllRoutes />
+      <ToastProvider>
+        {location.pathname !== "/" &&
+          location.pathname !== "/user-experience-form-1" && <Header />}
+        <AllRoutes />
+      </ToastProvider>
     </GoogleOAuthProvider>
   );
 }

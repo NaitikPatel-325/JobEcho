@@ -4,16 +4,48 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import type { IExperienceSubmission } from "@/pages/InterviewExperience";
 
 export default function CompanyAnalysis() {
   const [company, setCompany] = useState("");
   const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
+  const [companyId, setCompanyId] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<IExperienceSubmission[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const cleanAnalysisText = (text:any) => {
     return text.replace(/[*_~`]/g, "").replace(/([.!?])\s*/g, "$1\n");
+  };
+
+  const fetchReviews = async (id: string) => {
+    setReviewsLoading(true);
+    setReviewsError(null);
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/experience/get-experience-by-company/${id}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch reviews");
+      }
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setReviews(data);
+      } else {
+        setReviewsError("Invalid reviews data from server.");
+      }
+    } catch (err) {
+      setReviewsError("Error fetching reviews. Please try again.");
+    } finally {
+      setReviewsLoading(false);
+    }
   };
 
   const fetchAnalysis = async () => {
@@ -38,6 +70,7 @@ export default function CompanyAnalysis() {
       }
 
       const companyId = companyData._id;
+      setCompanyId(companyId);
 
       const analysisResponse = await fetch(
         `${API_BASE_URL}/user/getaipowerdanalysis/${companyId}`,
@@ -55,6 +88,9 @@ export default function CompanyAnalysis() {
       } else {
         setAnalysis(cleanAnalysisText(analysisData.analysis));
       }
+
+      // Automatically fetch all reviews/experiences for this company
+      await fetchReviews(companyId);
     } catch (error) {
       console.error("Error fetching analysis:", error);
       setAnalysis("⚠️ Error fetching analysis. Please try again.");
@@ -74,7 +110,7 @@ export default function CompanyAnalysis() {
         <Card className="shadow-lg rounded-2xl border-none">
           <CardContent className="p-6">
             <h2 className="text-2xl font-bold text-center text-gray-900">
-              🧠 Interview Analysis Chatbot
+              🧠 Interview Analysis & Reviews
             </h2>
             <p className="text-center text-gray-600 mt-2">
               Enter a company name to get AI-powered insights on their interview process.
@@ -104,6 +140,65 @@ export default function CompanyAnalysis() {
               >
                 {analysis}
               </motion.div>
+            )}
+
+            {companyId && (
+              <div className="mt-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Community Reviews
+                  </h3>
+                  {reviewsLoading && (
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-600" />
+                  )}
+                </div>
+
+                {reviewsError && (
+                  <p className="text-sm text-red-500">{reviewsError}</p>
+                )}
+
+                {!reviewsLoading && !reviewsError && reviews.length === 0 && (
+                  <p className="text-sm text-gray-500">
+                    No reviews found for this company yet.
+                  </p>
+                )}
+
+                {!reviewsLoading && reviews.length > 0 && (
+                  <div className="mt-2 space-y-3 max-h-64 overflow-y-auto pr-1">
+                    {reviews.map((exp) => (
+                      <div
+                        key={exp.id}
+                        className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm"
+                      >
+                        <p className="text-sm font-semibold text-gray-900">
+                          {exp.firstName} {exp.lastName} •{" "}
+                          <span className="text-gray-600">
+                            {exp.collegeName} ({exp.graduationYear})
+                          </span>
+                        </p>
+                        {exp.experiences?.[0] && (
+                          <p className="text-xs text-gray-700 mt-1">
+                            <span className="font-medium">Latest:</span>{" "}
+                            {typeof (exp.experiences[0] as any).company === "string"
+                              ? (exp.experiences[0] as any).company
+                              : (exp.experiences[0] as any).company?.name}{" "}
+                            •{" "}
+                            {exp.experiences[0].year}
+                          </p>
+                        )}
+                        {exp.offers?.[0] && (
+                          <p className="text-xs text-gray-700 mt-1">
+                            <span className="font-medium">Status:</span>{" "}
+                            {exp.offers[0].status}
+                            {exp.offers[0].package &&
+                              ` • ${exp.offers[0].package} LPA`}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
           </CardContent>
         </Card>

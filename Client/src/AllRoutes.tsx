@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import InterviewExperiences from "./pages/InterviewExperience";
 import CompanyAnalysis from "./components/CompanyAnalysis";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const Home = lazy(() => import("./pages/Home"));
 const Landing = lazy(() => import("./pages/Landing"));
@@ -32,13 +33,62 @@ export default function AllRoutes() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/userdetails" element={<UserDetails />} />
-        <Route path="/user-experience-form" element={<ExperienceForm />} />
-        <Route path="/InterviewExperience" element={<InterviewExperiences company_id="" />} />
-        <Route path="/user-experience-form-1" element={<NewExperienceForm />} />
-        <Route path="/CollegeCompanies" element={<CollegeCompanies />} />
-        <Route path="/chat" element={ <Chat/> }/>
-        <Route path="/companyanalysis" element={<CompanyAnalysis/>}/>
+        <Route
+          path="/userdetails"
+          element={
+            <ProtectedRoute>
+              <UserDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-experience-form"
+          element={
+            <ProtectedRoute>
+              <ExperienceForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/InterviewExperience"
+          element={
+            <ProtectedRoute>
+              <InterviewExperiences company_id="" />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-experience-form-1"
+          element={
+            <ProtectedRoute>
+              <NewExperienceForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/CollegeCompanies"
+          element={
+            <ProtectedRoute>
+              <CollegeCompanies />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/companyanalysis"
+          element={
+            <ProtectedRoute>
+              <CompanyAnalysis />
+            </ProtectedRoute>
+          }
+        />
 
 
 

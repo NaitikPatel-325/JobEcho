@@ -8,7 +8,7 @@ import { addCompany, setCollege, setCompanies } from "@/redux/slices/appSlice";
 export interface CollegeCompany {
   id: string;
   name: string;
-  company: string;
+  company: any;
 }
 
 interface CompanyExperienceProps {
@@ -24,7 +24,7 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
   const navigate = useNavigate();
   const [CompaniesForCollege, setCompaniesForCollege] = useState<string[]>([]);
 
-  console.log(selectedCollege);
+  // console.log(selectedCollege);
 
   const dispatch = useDispatch();
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -39,7 +39,9 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
 
       try {
         const response = await fetch(
-          `${API_BASE_URL}/user/getCollegesandcompany/${selectedCollege}`, {
+          `${API_BASE_URL}/user/getCollegesandcompany/${encodeURIComponent(
+            selectedCollege.id
+          )}`, {
             method: "GET", 
             credentials: "include" // Allows cookies to be sent with the request
         }
@@ -117,7 +119,11 @@ const CompanyExperience = ({ selectedCollege }: CompanyExperienceProps) => {
                         <h3 className="text-xl font-semibold text-white">
                           {college.name}
                         </h3>
-                        <p className="text-gray-400">{college.company}</p>
+                        <p className="text-gray-400">
+                          {typeof college.company === "string"
+                            ? college.company
+                            : college.company?.name}
+                        </p>
                       </div>
                     </div>
                   </CardContent>

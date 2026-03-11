@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, GraduationCap, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import CompanyExperience from "./CompanyExperience";
 import InterviewExperience from "./InterviewExperience";
 import SunburstChart from "./sunburst";
@@ -21,6 +21,7 @@ export default function CollegeCompanies() {
   const [selectedCollege, setSelectedCollege] = useState<College | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -65,7 +66,24 @@ export default function CollegeCompanies() {
   
     fetchColleges();
   }, []);
-  
+
+  const handleSidebarCompanyClick = async (companyName: string) => {
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/company/getbyname/${encodeURIComponent(companyName)}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      if (data && data._id) {
+        navigate(`/CollegeCompanies?id=${data._id}`);
+      }
+    } catch (err) {
+      console.error("Failed to navigate to company experiences", err);
+    }
+  };
 
   const filteredColleges = colleges.filter((college) =>
     college?.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -148,6 +166,7 @@ export default function CollegeCompanies() {
                     companiesforcollege.map((company) => (
                       <motion.div key={company} className="relative" layout>
                         <motion.button
+                          onClick={() => handleSidebarCompanyClick(company)}
                           whileHover={{ scale: 1.02, x: 4 }}
                           whileTap={{ scale: 0.97 }}
                           className="w-full text-left p-3.5 rounded-xl transition-all duration-200 bg-white/5 hover:bg-white/10 border border-white/15 flex items-center justify-between"

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import VariableProximity from "@/Animation/VariableProximity/VariableProximity";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, MouseEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useLogoutMutation, useGoogleSignInMutation } from "@/redux/slices/api";
@@ -20,6 +20,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/components/ui/toast";
 
 export default function Header() {
   const containerRef = useRef(null);
@@ -38,6 +39,7 @@ export default function Header() {
   const [logoutMutation] = useLogoutMutation();
   const [loginWithGoogle] = useGoogleSignInMutation();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const handleResize = () => dispatch(setCurrentWidth(window.innerWidth));
@@ -59,6 +61,19 @@ export default function Header() {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const handleProtectedLinkClick = (event: MouseEvent, path: string) => {
+    if (!isLoggedIn) {
+      event.preventDefault();
+      showToast({
+        title: "Login required",
+        description: "Please sign in to access this section.",
+        type: "destructive",
+      });
+      return;
+    }
+    navigate(path);
   };
 
 
@@ -131,6 +146,7 @@ export default function Header() {
               <Link
                 to="/user-experience-form-1"
                 className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+                onClick={(e) => handleProtectedLinkClick(e, "/user-experience-form-1")}
               >
                 Share Experience
               </Link>
@@ -139,6 +155,7 @@ export default function Header() {
               <Link
                 to="/CollegeCompanies"
                 className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+                onClick={(e) => handleProtectedLinkClick(e, "/CollegeCompanies")}
               >
                 Interview Experiences
               </Link>
@@ -147,13 +164,16 @@ export default function Header() {
               <Link
                 to="/Chat"
                 className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+                onClick={(e) => handleProtectedLinkClick(e, "/Chat")}
               >
                 Live Chat
               </Link>
             </li>
             <li>
-              <Link to="/companyanalysis"
+              <Link
+                to="/companyanalysis"
                 className="relative md:p-4 py-3 px-0 block hover:text-white transition-all duration-300"
+                onClick={(e) => handleProtectedLinkClick(e, "/companyanalysis")}
               >
                 Company Analysis
               </Link>
@@ -182,6 +202,12 @@ export default function Header() {
                   <DropdownMenuContent className="w-48 bg-black">
                     <DropdownMenuItem className="text-white font-semibold">
                       Hello, {currentUser?.user?.name || "User"}!
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate("/userdetails")}
+                      className="cursor-pointer text-white"
+                    >
+                      Update Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={handleLogout}
